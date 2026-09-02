@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b5kvgaua51lq4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cbw3o"]
+size = Vector3(8, 0.1, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cbw3o"]
+size = Vector3(8, 0.1, 8)
+
+[node name="lobby_level" type="Node3D" unique_id=2129231941]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1670704810]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=865663196]
+shape = SubResource("BoxShape3D_cbw3o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=63222250]
+mesh = SubResource("BoxMesh_cbw3o")
+
+[node name="SpotLight3D" type="DirectionalLight3D" parent="." unique_id=1280530781]
+transform = Transform3D(1, 0, 0, 0, 0.7055918, 0.7086185, 0, -0.7086185, 0.7055918, 0, 3.2436485, 4.3380523)

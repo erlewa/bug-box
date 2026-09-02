@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cad3tk841gia0"]
+
+[ext_resource type="Script" uid="uid://c7bisibikqqxe" path="res://scripts/player.gd" id="1_3vyb7"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3vyb7"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_021oi"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_cbw3o"]
+
+[node name="Player" type="CharacterBody3D" unique_id=216894610]
+script = ExtResource("1_3vyb7")
+
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1852423883]
+replication_config = SubResource("SceneReplicationConfig_3vyb7")
+
+[node name="ClientSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=766818782]
+replication_config = SubResource("SceneReplicationConfig_3vyb7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1484261188]
+shape = SubResource("CapsuleShape3D_021oi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=177645617]
+process_mode = 3
+mesh = SubResource("CapsuleMesh_cbw3o")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1787981846]
+transform = Transform3D(1, 0, 0, 0, 0.9100582, 0.41448048, 0, -0.41448048, 0.9100582, 0, 1.4006497, 2.2464137)
