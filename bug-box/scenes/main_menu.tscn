@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://bgkdfma75lhwj"]
+
+[ext_resource type="Script" uid="uid://cknr7qib7ur4x" path="res://scripts/main_menu.gd" id="1_bqqt6"]
+[ext_resource type="Script" uid="uid://c60rpcck0nsfw" path="res://scripts/ui/join.gd" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://cg3ompgruk47d" path="res://scripts/ui/host.gd" id="2_ekxnf"]
+
+[node name="MainMenu" type="Control" unique_id=1420500914]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bqqt6")
+
+[node name="Label" type="Label" parent="." unique_id=822566552]
+layout_mode = 0
+offset_left = 704.0
+offset_top = 299.0
+offset_right = 764.0
+offset_bottom = 322.0
+text = "Host IP:"
+metadata/_edit_use_anchors_ = true
+
+[node name="IPInput" type="TextEdit" parent="." unique_id=1340952321]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 694.0
+offset_top = 326.0
+offset_right = 920.0
+offset_bottom = 373.0
+
+[node name="Join" type="Button" parent="." unique_id=218367565]
+layout_mode = 0
+offset_left = 442.0
+offset_top = 326.0
+offset_right = 666.0
+offset_bottom = 372.0
+text = "Join"
+script = ExtResource("1_l6cm7")
+
+[node name="Host" type="Button" parent="." unique_id=1468057238]
+layout_mode = 0
+offset_left = 442.0
+offset_top = 387.0
+offset_right = 666.0
+offset_bottom = 433.0
+text = "Host"
+script = ExtResource("2_ekxnf")
+
+[connection signal="pressed" from="Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="Join" to="Join" method="_on_pressed"]
+[connection signal="pressed" from="Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="Host" to="Host" method="_on_pressed"]

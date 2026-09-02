@@ -48,7 +48,7 @@ func create_game():
 	var error = peer.create_server(PORT, MAX_CONNECTIONS)
 	if error:
 		return error
-	multiplayer.multipxlayer_peer = peer
+	multiplayer.multiplayer_peer = peer
 
 	players[1] = player_info
 	player_connected.emit(1, player_info)
@@ -87,6 +87,7 @@ func _register_player(new_player_info):
 	var new_player_id = multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_info
 	player_connected.emit(new_player_id, new_player_info)
+	print("NEW PLAYER CONNECTED; PLAYERS " + str(players))
 
 
 func _on_player_disconnected(id):
