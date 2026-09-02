@@ -6,7 +6,7 @@ size = Vector3(8, 0.1, 8)
 [sub_resource type="BoxMesh" id="BoxMesh_cbw3o"]
 size = Vector3(8, 0.1, 8)
 
-[node name="level" type="Node3D" unique_id=2129231941]
+[node name="lobby_level" type="Node3D" unique_id=2129231941]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1670704810]
 

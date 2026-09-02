@@ -1,9 +1,13 @@
 extends CharacterBody3D
+class_name Player
 
+# https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
+var peer_id: int = 1 # The peer that controls this player
+var local: bool = true # If this player belongs to the local peer
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
