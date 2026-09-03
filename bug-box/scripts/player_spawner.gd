@@ -9,6 +9,7 @@ func _ready() -> void:
 		add_child(player)
 
 func _on_player_connected(peer_id, player_info):
+	print(player_info)
 	if !(multiplayer.is_server()):
 		return
 	var player = PLAYER.instantiate()

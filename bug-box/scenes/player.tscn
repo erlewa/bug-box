@@ -14,8 +14,9 @@ properties/1/replication_mode = 1
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_cbw3o"]
 
-[node name="Player" type="CharacterBody3D" unique_id=216894610]
+[node name="Player" type="CharacterBody3D" unique_id=216894610 node_paths=PackedStringArray("CAMERA_CONTROLLER")]
 script = ExtResource("1_3vyb7")
+CAMERA_CONTROLLER = NodePath("Camera3D")
 
 [node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1852423883]
 replication_config = SubResource("SceneReplicationConfig_3vyb7")
