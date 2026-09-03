@@ -65,8 +65,15 @@ mesh = SubResource("BoxMesh_l14r6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
+[node name="SpotLight3D2" type="SpotLight3D" parent="." unique_id=1799223686]
+transform = Transform3D(0.9999638, 1.820527e-05, -0.008506398, 0.008506417, -0.0021401034, 0.9999616, 0, -0.9999978, -0.0021401807, -2.8354492, 32.46724, -1.6295834)
+light_energy = 32.0
+spot_range = 4096.0
+spot_angle = 180.0
+
 [node name="SpotLight3D" type="DirectionalLight3D" parent="." unique_id=1823111128]
-transform = Transform3D(1, 0, 0, 0, -0.0021401807, 0.9999978, 0, -0.9999978, -0.0021401807, -2.8354492, 30.507732, -1.6295834)
+transform = Transform3D(0.85891366, 0.0010960302, -0.5121193, 0.5121204, -0.0018382304, 0.85891175, 0, -0.9999978, -0.0021401807, -2.8354492, 30.507732, -1.6295834)
+visible = false
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=2084917811]
 _spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
