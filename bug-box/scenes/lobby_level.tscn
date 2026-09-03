@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://b5kvgaua51lq4"]
 
+[ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="1_2uyve"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_cbw3o"]
 size = Vector3(8, 0.1, 8)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cbw3o"]
 size = Vector3(8, 0.1, 8)
 
-[node name="lobby_level" type="Node3D" unique_id=2129231941]
+[node name="LobbyLevel" type="Node3D" unique_id=2129231941]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1670704810]
 
@@ -17,4 +19,12 @@ shape = SubResource("BoxShape3D_cbw3o")
 mesh = SubResource("BoxMesh_cbw3o")
 
 [node name="SpotLight3D" type="DirectionalLight3D" parent="." unique_id=1280530781]
-transform = Transform3D(1, 0, 0, 0, 0.7055918, 0.7086185, 0, -0.7086185, 0.7055918, 0, 3.2436485, 4.3380523)
+transform = Transform3D(1, 0, 0, 0, 0.852576, 0.5226033, 0, -0.5226033, 0.852576, 0, 3.2436485, 4.3380523)
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=529339336]
+_spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
+spawn_path = NodePath(".")
+script = ExtResource("1_2uyve")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=545248205]
+transform = Transform3D(1, 0, 0, 0, 0.97758275, 0.21055147, 0, -0.21055147, 0.97758275, 0, 2.2731662, 4.6313443)
