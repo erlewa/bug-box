@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://13pjbvkins6l"]
 
-[ext_resource type="PackedScene" uid="uid://cad3tk841gia0" path="res://scenes/player.tscn" id="1_7wnc2"]
+[ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="1_7wnc2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_l14r6"]
 size = Vector3(32, 1, 32)
@@ -11,7 +11,7 @@ data = PackedVector3Array(-16, 0.00049999997, 16, 16, 0.00049999997, 16, -16, -0
 [node name="level0" type="Node3D" unique_id=1937868015]
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1262491241]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1064364090]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
@@ -68,5 +68,7 @@ shape = SubResource("ConcavePolygonShape3D_7wnc2")
 [node name="SpotLight3D" type="DirectionalLight3D" parent="." unique_id=1823111128]
 transform = Transform3D(1, 0, 0, 0, -0.0021401807, 0.9999978, 0, -0.9999978, -0.0021401807, -2.8354492, 30.507732, -1.6295834)
 
-[node name="Bug" parent="." unique_id=216894610 instance=ExtResource("1_7wnc2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.621193, 1.2204285, 1.086112)
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=2084917811]
+_spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
+spawn_path = NodePath(".")
+script = ExtResource("1_7wnc2")
