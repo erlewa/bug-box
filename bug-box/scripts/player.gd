@@ -3,6 +3,7 @@ class_name Player
 
 # https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
 @onready var ray_cast_3d: RayCast3D = %RayCast3D
+@onready var basis_label: Label = %BasisLabel
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -31,6 +32,9 @@ func _ready() -> void:
 		$Camera3D.make_current()
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _process(delta: float) -> void:
+	basis_label.text = "Basis: " + str(global_transform.basis)
 
 func _physics_process(delta: float) -> void:
 	if !(local):
@@ -70,9 +74,9 @@ func change_gravity():
 	)
 	tween.tween_callback(
 		func():
-			#ray_cast_3d.enabled = true
+			await get_tree().create_timer(0.5).timeout
+			ray_cast_3d.enabled = true
 			print("In Callback: " + str(global_transform.basis))
-			pass
 	)
 	print("Start Basis: " + str(start_basis))
 	print("Target Basis: " + str(target_basis))
@@ -135,16 +139,15 @@ func _update_camera(delta):
 	
 	_mouse_rotation.x += _tilt_input * delta
 	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
-	_mouse_rotation.y += _rotation_input * delta
-	
-	_player_rotation = Vector3(0.0,_mouse_rotation.y,0.0)
+	_mouse_rotation.y = _rotation_input * delta
+
 	_camera_rotation = Vector3(_mouse_rotation.x,0.0,0.0)
 	
 	CAMERA_CONTROLLER.transform.basis = Basis.from_euler(_camera_rotation)
 	CAMERA_CONTROLLER.rotation.z = 0.0
 	
 	# TO-DO(erlewa): Need to respect pre-existing alterations to global_transform.basis
-	# global_transform.basis = Basis.from_euler(_player_rotation)
+	global_transform.basis = global_transform.basis.rotated(global_transform.basis.y, _mouse_rotation.y)
 	
 	_rotation_input = 0.0
 	_tilt_input = 0.0

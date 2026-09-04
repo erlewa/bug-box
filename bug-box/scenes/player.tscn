@@ -23,6 +23,10 @@ properties/4/replication_mode = 1
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_cbw3o"]
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_cbw3o"]
+top_radius = 0.25
+bottom_radius = 0.0
+
 [node name="Player" type="CharacterBody3D" unique_id=216894610 node_paths=PackedStringArray("CAMERA_CONTROLLER")]
 script = ExtResource("1_3vyb7")
 CAMERA_CONTROLLER = NodePath("Camera3D")
@@ -40,9 +44,28 @@ shape = SubResource("CapsuleShape3D_021oi")
 process_mode = 3
 mesh = SubResource("CapsuleMesh_cbw3o")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1219369154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37175572, 0)
+mesh = SubResource("CylinderMesh_cbw3o")
+
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1787981846]
 transform = Transform3D(1, 0, 0, 0, 0.9100582, 0.41448048, 0, -0.41448048, 0.9100582, 0, 1.4006497, 2.2464137)
 
 [node name="RayCast3D" type="RayCast3D" parent="." unique_id=2126956000]
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -1)
+
+[node name="Debug" type="Control" parent="." unique_id=159988412]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BasisLabel" type="Label" parent="Debug" unique_id=756922720]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 7.0
+offset_right = 52.0
+offset_bottom = 30.0
+text = "Basis: "
