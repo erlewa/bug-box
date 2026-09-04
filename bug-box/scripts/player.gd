@@ -50,6 +50,21 @@ func _physics_process(delta: float) -> void:
 	if 	ray_cast_3d.is_colliding():
 		change_gravity.rpc_id(1)
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("escape"):
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		print("ESCAPED")
+
+func _unhandled_input(event):
+	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
+	if _mouse_input :
+		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
+		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
+
+
 
 @rpc("any_peer", "call_local", "reliable", 0)
 func change_gravity():
@@ -62,6 +77,7 @@ func change_gravity():
 	
 	gravity_dir = ray_cast_3d.get_collision_normal().normalized()
 	velocity = Vector3(0.0, 0.0, 0.0)
+	vel_speed.y = 0
 	
 	var obj = ray_cast_3d.get_collider()
 	ray_cast_3d.enabled = false
@@ -72,20 +88,16 @@ func change_gravity():
 	
 	tween.tween_method(
 		func(weight: float):
-			global_transform.basis = start_basis.slerp(target_basis, weight)
-			print(global_transform.basis),
+			global_transform.basis = start_basis.slerp(target_basis, weight),
 		0.0, 1.0, 0.5
 	)
 	tween.tween_callback(
 		func():
 			await get_tree().create_timer(0.5).timeout
 			ray_cast_3d.enabled = true
-			print("In Callback: " + str(global_transform.basis))
 	)
-	print("Start Basis: " + str(start_basis))
-	print("Target Basis: " + str(target_basis))
 
-
+var vel_speed = Vector3(SPEED, 0, SPEED)
 @rpc("any_peer", "call_local", "reliable", 0)
 func process_physics(delta, input_dir, jump):
 	if !(multiplayer.is_server()):
@@ -93,35 +105,39 @@ func process_physics(delta, input_dir, jump):
 	if peer_id != multiplayer.get_remote_sender_id():
 		return
 	
-	print("Start of process_physics: " + str(global_transform.basis))
-	
 	_update_camera(delta)
-
-	# Add gravity.
-	if not is_on_floor():
-		velocity += gravity_dir * gravity_mag * delta
-
-	# Handle jump.
-	if jump and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
+	
 
 	var direction := (global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
+	# Handle jump.
+	if jump and is_on_floor():
+		direction.y = 1.0
+		vel_speed.y = JUMP_VELOCITY
+		
+	# Add gravity.
+	if not is_on_floor():
+		direction.y = 1.0
+		vel_speed += gravity_dir * gravity_mag * delta
+	
 	physics_label.text = (
 		"Input_dir: " + str(input_dir) +
-		"\nDirection: " + str(direction)
+		"\nDirection: " + str(direction) +
+		"\nVel Speed: " + str(vel_speed) + 
+		"\nD*VS: " + str(direction * vel_speed)
 	)
+	
 	if direction:
-		velocity = direction * SPEED
+		velocity = direction * vel_speed
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		velocity.y = move_toward(velocity.y, 0, SPEED)
 	
+
+	
+	
 	move_and_slide()
-	print(global_transform.basis)
 
 
 var _mouse_input : bool = false
@@ -131,12 +147,6 @@ var _tilt_input : float
 var _player_rotation : Vector3
 var _camera_rotation : Vector3
 
-func _unhandled_input(event):
-	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
-	if _mouse_input :
-		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
-		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
-		print(Vector2(_rotation_input,_tilt_input))
 
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
