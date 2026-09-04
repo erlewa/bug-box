@@ -4,6 +4,7 @@ class_name Player
 # https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
 @onready var ray_cast_3d: RayCast3D = %RayCast3D
 @onready var basis_label: Label = %BasisLabel
+@onready var physics_label: Label = %PhysicsLabel
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -34,7 +35,10 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _process(delta: float) -> void:
-	basis_label.text = "Basis: " + str(global_transform.basis)
+	basis_label.text = (
+		"Basis: " + str(global_transform.basis) +
+		"\nGravity Dir: " + str(gravity_dir)
+	)
 
 func _physics_process(delta: float) -> void:
 	if !(local):
@@ -56,7 +60,7 @@ func change_gravity():
 	if !(ray_cast_3d.is_colliding()):
 		return
 	
-	gravity_dir = ray_cast_3d.get_collision_normal().normalized() * -1
+	gravity_dir = ray_cast_3d.get_collision_normal().normalized()
 	velocity = Vector3(0.0, 0.0, 0.0)
 	
 	var obj = ray_cast_3d.get_collider()
@@ -93,7 +97,7 @@ func process_physics(delta, input_dir, jump):
 	
 	_update_camera(delta)
 
-	# Add the gravity.
+	# Add gravity.
 	if not is_on_floor():
 		velocity += gravity_dir * gravity_mag * delta
 
@@ -104,13 +108,17 @@ func process_physics(delta, input_dir, jump):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction := (global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	physics_label.text = (
+		"Input_dir: " + str(input_dir) +
+		"\nDirection: " + str(direction)
+	)
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.y = move_toward(velocity.y, 0, SPEED)
 	
 	move_and_slide()
 	print(global_transform.basis)

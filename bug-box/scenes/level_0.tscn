@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="1_7wnc2"]
 [ext_resource type="Texture2D" uid="uid://b585s71sxu2f6" path="res://assets/mcgrass.png" id="1_rerym"]
 [ext_resource type="Texture2D" uid="uid://bkxx5jftt6qbf" path="res://assets/mccobble.png" id="2_uijja"]
+[ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="4_uijja"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5nv5w"]
 albedo_texture = ExtResource("1_rerym")
@@ -101,3 +102,6 @@ visible = false
 _spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
 spawn_path = NodePath(".")
 script = ExtResource("1_7wnc2")
+
+[node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("4_uijja")]
+transform = Transform3D(7.16, 0, 0, 0, 7.16, 0, 0, 0, 7.16, 0, 0, 0)
