@@ -2,13 +2,16 @@ extends CharacterBody3D
 class_name Player
 
 # https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
+@onready var ray_cast_3d: RayCast3D = %RayCast3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
+
 @export var peer_id: int = 1 # The peer that controls this player
 var local: bool = true # If this player belongs to the local peer
-
+@export var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
+var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _enter_tree() -> void:
 	# Set node authority
@@ -27,7 +30,7 @@ func _ready() -> void:
 		# Activate the camera if local
 		$Camera3D.make_current()
 	
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
 	if !(local):
@@ -35,6 +38,44 @@ func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var jump = Input.is_action_just_pressed("ui_accept")
 	process_physics.rpc_id(1, delta, input_dir, jump)
+	
+	if 	ray_cast_3d.is_colliding():
+		change_gravity.rpc_id(1)
+
+
+@rpc("any_peer", "call_local", "reliable", 0)
+func change_gravity():
+	if !(multiplayer.is_server()):
+		return
+	if peer_id != multiplayer.get_remote_sender_id():
+		return
+	if !(ray_cast_3d.is_colliding()):
+		return
+	
+	gravity_dir = ray_cast_3d.get_collision_normal().normalized() * -1
+	velocity = Vector3(0.0, 0.0, 0.0)
+	
+	var obj = ray_cast_3d.get_collider()
+	ray_cast_3d.enabled = false
+	
+	var tween = create_tween()
+	var start_basis = global_transform.basis
+	var target_basis = obj.global_transform.basis
+	
+	tween.tween_method(
+		func(weight: float):
+			global_transform.basis = start_basis.slerp(target_basis, weight)
+			print(global_transform.basis),
+		0.0, 1.0, 0.5
+	)
+	tween.tween_callback(
+		func():
+			#ray_cast_3d.enabled = true
+			print("In Callback: " + str(global_transform.basis))
+			pass
+	)
+	print("Start Basis: " + str(start_basis))
+	print("Target Basis: " + str(target_basis))
 
 
 @rpc("any_peer", "call_local", "reliable", 0)
@@ -44,11 +85,13 @@ func process_physics(delta, input_dir, jump):
 	if peer_id != multiplayer.get_remote_sender_id():
 		return
 	
+	print("Start of process_physics: " + str(global_transform.basis))
+	
 	_update_camera(delta)
 
 	# Add the gravity.
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		velocity += gravity_dir * gravity_mag * delta
 
 	# Handle jump.
 	if jump and is_on_floor():
@@ -64,8 +107,9 @@ func process_physics(delta, input_dir, jump):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-
+	
 	move_and_slide()
+	print(global_transform.basis)
 
 
 var _mouse_input : bool = false
@@ -99,7 +143,8 @@ func _update_camera(delta):
 	CAMERA_CONTROLLER.transform.basis = Basis.from_euler(_camera_rotation)
 	CAMERA_CONTROLLER.rotation.z = 0.0
 	
-	global_transform.basis = Basis.from_euler(_player_rotation)
+	# TO-DO(erlewa): Need to respect pre-existing alterations to global_transform.basis
+	# global_transform.basis = Basis.from_euler(_player_rotation)
 	
 	_rotation_input = 0.0
 	_tilt_input = 0.0

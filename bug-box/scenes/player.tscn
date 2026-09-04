@@ -9,6 +9,15 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("RayCast3D:enabled")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:gravity_dir")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_021oi"]
 
@@ -33,3 +42,7 @@ mesh = SubResource("CapsuleMesh_cbw3o")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1787981846]
 transform = Transform3D(1, 0, 0, 0, 0.9100582, 0.41448048, 0, -0.41448048, 0.9100582, 0, 1.4006497, 2.2464137)
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=2126956000]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -1)
