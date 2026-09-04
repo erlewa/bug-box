@@ -30,12 +30,12 @@ func _ready() -> void:
 		# Activate the camera if local
 		$Camera3D.make_current()
 	
-	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
 	if !(local):
 		return
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir := Input.get_vector("left", "right", "up", "down")
 	var jump = Input.is_action_just_pressed("ui_accept")
 	process_physics.rpc_id(1, delta, input_dir, jump)
 	
