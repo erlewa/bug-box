@@ -25,7 +25,7 @@ func _ready() -> void:
 	local = (peer_id == multiplayer.get_unique_id())
 	if (local):
 		# Activate the camera if local
-		$Camera3D.make_current()
+		$CameraController/Camera3D.make_current()
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -66,7 +66,6 @@ func process_physics(delta, input_dir, jump):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
-
 
 var _mouse_input : bool = false
 var _mouse_rotation : Vector3
