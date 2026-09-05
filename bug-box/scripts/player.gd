@@ -5,6 +5,7 @@ class_name Player
 @onready var ray_cast_3d: RayCast3D = %RayCast3D
 @onready var basis_label: Label = %BasisLabel
 @onready var physics_label: Label = %PhysicsLabel
+@onready var debug: Control = %Debug
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -39,6 +40,9 @@ func _process(delta: float) -> void:
 		"Basis: " + str(global_transform.basis) +
 		"\nGravity Dir: " + str(gravity_dir)
 	)
+	if Input.is_action_just_pressed("debug_mode"):
+		debug.visible = !debug.visible
+	
 
 func _physics_process(delta: float) -> void:
 	if !(local):
@@ -75,9 +79,9 @@ func change_gravity():
 	if !(ray_cast_3d.is_colliding()):
 		return
 	
-	gravity_dir = ray_cast_3d.get_collision_normal().normalized()
+	gravity_dir = ray_cast_3d.get_collision_normal().normalized() * -1
 	velocity = Vector3(0.0, 0.0, 0.0)
-	vel_speed.y = 0
+	vel_speed = Vector3(SPEED, SPEED, SPEED)
 	
 	var obj = ray_cast_3d.get_collider()
 	ray_cast_3d.enabled = false
@@ -93,6 +97,8 @@ func change_gravity():
 	)
 	tween.tween_callback(
 		func():
+			up_direction = global_transform.basis.y
+			apply_floor_snap()
 			await get_tree().create_timer(0.5).timeout
 			ray_cast_3d.enabled = true
 	)
@@ -107,24 +113,23 @@ func process_physics(delta, input_dir, jump):
 	
 	_update_camera(delta)
 	
-
-	var direction := (global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
 	# Handle jump.
 	if jump and is_on_floor():
-		direction.y = 1.0
-		vel_speed.y = JUMP_VELOCITY
+		vel_speed = abs(global_transform.basis.x * SPEED) + global_transform.basis.y * JUMP_VELOCITY + abs(global_transform.basis.z * SPEED)
 		
-	# Add gravity.
+	## Add gravity.
 	if not is_on_floor():
-		direction.y = 1.0
 		vel_speed += gravity_dir * gravity_mag * delta
+		
+	var direction := (global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized() + global_transform.basis.y
 	
 	physics_label.text = (
 		"Input_dir: " + str(input_dir) +
 		"\nDirection: " + str(direction) +
 		"\nVel Speed: " + str(vel_speed) + 
-		"\nD*VS: " + str(direction * vel_speed)
+		"\nD*VS (Velocity): " + str(direction * vel_speed) +
+		"\nOn Ground: " + str(is_on_floor()) +
+		"\nUp Direction: " + str(up_direction)
 	)
 	
 	if direction:
@@ -133,9 +138,6 @@ func process_physics(delta, input_dir, jump):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		velocity.y = move_toward(velocity.y, 0, SPEED)
-	
-
-	
 	
 	move_and_slide()
 

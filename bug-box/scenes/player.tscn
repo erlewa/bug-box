@@ -57,6 +57,8 @@ unique_name_in_owner = true
 target_position = Vector3(0, 0, -1)
 
 [node name="Debug" type="Control" parent="." unique_id=159988412]
+unique_name_in_owner = true
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

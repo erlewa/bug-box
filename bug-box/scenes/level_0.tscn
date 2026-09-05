@@ -104,4 +104,4 @@ spawn_path = NodePath(".")
 script = ExtResource("1_7wnc2")
 
 [node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("4_uijja")]
-transform = Transform3D(7.16, 0, 0, 0, 7.16, 0, 0, 0, 7.16, 0, 0, 0)
+transform = Transform3D(7.16, 0, 0, 0, 7.16, 0, 0, 0, 7.16, 0, 5.987464, 0)
