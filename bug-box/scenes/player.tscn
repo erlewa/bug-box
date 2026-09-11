@@ -60,9 +60,12 @@ target_position = Vector3(0, 0, -1)
 unique_name_in_owner = true
 visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 
 [node name="BasisLabel" type="Label" parent="Debug" unique_id=756922720]
 unique_name_in_owner = true
@@ -80,6 +83,18 @@ offset_left = 10.0
 offset_top = 144.0
 offset_right = 50.0
 offset_bottom = 167.0
+vertical_alignment = 1
+
+[node name="GravityLabel" type="Label" parent="Debug" unique_id=36066043]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 83.0
+grow_vertical = 0
+text = "Grav Label"
 
 [node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("2_g2els")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)

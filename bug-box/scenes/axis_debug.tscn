@@ -32,5 +32,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_0n6md")
 
 [node name="Z" type="MeshInstance3D" parent="." unique_id=1596239825]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+rotation_edit_mode = 2
 mesh = SubResource("BoxMesh_ldqs0")
 surface_material_override/0 = SubResource("StandardMaterial3D_ant3u")

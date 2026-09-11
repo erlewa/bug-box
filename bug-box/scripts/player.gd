@@ -6,6 +6,7 @@ class_name Player
 @onready var basis_label: Label = %BasisLabel
 @onready var physics_label: Label = %PhysicsLabel
 @onready var debug: Control = %Debug
+@onready var gravity_label: Label = %GravityLabel
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -42,7 +43,7 @@ func _process(delta: float) -> void:
 	)
 	if Input.is_action_just_pressed("debug_mode"):
 		debug.visible = !debug.visible
-	
+
 
 func _physics_process(delta: float) -> void:
 	if !(local):
@@ -60,15 +61,12 @@ func _input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		print("ESCAPED")
 
 func _unhandled_input(event):
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
 	if _mouse_input :
 		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
 		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
-
-
 
 @rpc("any_peer", "call_local", "reliable", 0)
 func change_gravity():
@@ -84,11 +82,32 @@ func change_gravity():
 	vel_speed = Vector3(SPEED, SPEED, SPEED)
 	
 	var obj = ray_cast_3d.get_collider()
+	var norm = ray_cast_3d.get_collision_normal()
 	ray_cast_3d.enabled = false
 	
+	var surface_y = abs(norm.cross(global_transform.basis.z).normalized()) # Always want +y
+	var rot_axis = surface_y.cross(norm).normalized()
+	var target_basis = global_transform.basis.rotated(rot_axis, global_transform.basis.y.angle_to(norm))
+	#target_basis.y = norm
+	#target_basis.x = target_basis.z.cross(norm)
+	#target_basis.z = target_basis.x.cross(norm)
+	#target_basis = target_basis.orthonormalized()
+	
+	gravity_label.text = (
+		"Starting Basis: " + str(global_transform.basis) +
+		"\nRotation: " + str(rad_to_deg(global_transform.basis.y.angle_to(norm))) +
+		"\nNormal: " + str(norm) +
+		"\nSurface Y: " + str(surface_y) +
+		"\nRotation Axis: " + str(rot_axis) +
+		"\nNormal Target: " + str(target_basis) +
+		"\nObject Basis: " + str(obj.global_transform.basis)
+	)
+	
+	
+	# TO-DO(erlewa): Rotation should be based on surface normal not basis,
+	# 		to enable more complex surface walking
 	var tween = create_tween()
 	var start_basis = global_transform.basis
-	var target_basis = obj.global_transform.basis
 	
 	tween.tween_method(
 		func(weight: float):
@@ -121,7 +140,7 @@ func process_physics(delta, input_dir, jump):
 	if not is_on_floor():
 		vel_speed += gravity_dir * gravity_mag * delta
 		
-	var direction := (global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized() + global_transform.basis.y
+	var direction: Vector3 = (global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized() + abs(global_transform.basis.y)
 	
 	physics_label.text = (
 		"Input_dir: " + str(input_dir) +
@@ -138,6 +157,15 @@ func process_physics(delta, input_dir, jump):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		velocity.y = move_toward(velocity.y, 0, SPEED)
+	
+	physics_label.text = (
+		"Input_dir: " + str(input_dir) +
+		"\nDirection: " + str(direction) +
+		"\nVel Speed: " + str(vel_speed) + 
+		"\nD*VS (Velocity): " + str(direction * vel_speed) +
+		"\nOn Ground: " + str(is_on_floor()) +
+		"\nUp Direction: " + str(up_direction)
+	)
 	
 	move_and_slide()
 
