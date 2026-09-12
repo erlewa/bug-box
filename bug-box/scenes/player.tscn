@@ -81,5 +81,13 @@ offset_top = 144.0
 offset_right = 50.0
 offset_bottom = 167.0
 
+[node name="PlayerLabel" type="Label" parent="Debug" unique_id=1551562427]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 80.0
+offset_right = 50.0
+offset_bottom = 103.0
+
 [node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("2_g2els")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)

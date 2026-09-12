@@ -5,6 +5,7 @@ class_name Player
 @onready var ray_cast_3d: RayCast3D = %RayCast3D
 @onready var basis_label: Label = %BasisLabel
 @onready var physics_label: Label = %PhysicsLabel
+@onready var player_label: Label = %PlayerLabel
 @onready var debug: Control = %Debug
 
 const SPEED = 5.0
@@ -12,6 +13,7 @@ const JUMP_VELOCITY = 4.5
 
 
 @export var peer_id: int = 1 # The peer that controls this player
+@export var role: String = "hider"
 var local: bool = true # If this player belongs to the local peer
 @export var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -42,6 +44,11 @@ func _process(delta: float) -> void:
 	)
 	if Input.is_action_just_pressed("debug_mode"):
 		debug.visible = !debug.visible
+		
+	player_label.text = (
+		"Name: " + str(self.name) +
+		"\nRole: " + str(self.role)
+	)
 	
 
 func _physics_process(delta: float) -> void:

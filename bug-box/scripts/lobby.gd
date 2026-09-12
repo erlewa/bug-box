@@ -19,7 +19,7 @@ var players = {}
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
 # entered in a UI scene.
-var player_info = {"name": "Name"}
+var player_info = {"name": "Name", "role": "hider"}
 
 var players_loaded = 0
 
@@ -58,7 +58,21 @@ func remove_multiplayer_peer():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players.clear()
 
-
+func assign_roles():
+	if not multiplayer.is_server():
+		return
+		
+	var player_ids = players.keys()
+	var seeker_id = player_ids[randi() % player_ids.size()]
+	
+	for peer_id in player_ids:
+		players[peer_id]["role"] = "seeker" if peer_id == seeker_id else "hider"
+	assign_roles_to_players.rpc(players)
+	
+@rpc("any_peer", "reliable")
+func assign_roles_to_players(updated_players):
+	players = updated_players
+	
 # When the server decides to start the game from a UI scene,
 # do Lobby.load_game.rpc(filepath)
 @rpc("call_local", "reliable")

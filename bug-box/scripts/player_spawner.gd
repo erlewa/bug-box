@@ -14,4 +14,5 @@ func _on_player_connected(peer_id, player_info):
 		return
 	var player = PLAYER.instantiate()
 	player.peer_id = peer_id
+	player.role = player_info.get("role", "hider")
 	add_child(player, true)
