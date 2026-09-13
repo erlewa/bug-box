@@ -77,28 +77,26 @@ func change_gravity():
 	if !(ray_cast_3d.is_colliding()):
 		return
 	
-	gravity_dir = ray_cast_3d.get_collision_normal().normalized() * -1
 	velocity = Vector3(0.0, 0.0, 0.0)
-	vel_speed = Vector3(SPEED, SPEED, SPEED)
 	
 	var obj = ray_cast_3d.get_collider()
 	var norm = ray_cast_3d.get_collision_normal()
 	ray_cast_3d.enabled = false
 	
-	var surface_y = abs(norm.cross(global_transform.basis.z).normalized()) # Always want +y
-	var rot_axis = surface_y.cross(norm).normalized()
-	var target_basis = global_transform.basis.rotated(rot_axis, global_transform.basis.y.angle_to(norm))
-	#target_basis.y = norm
-	#target_basis.x = target_basis.z.cross(norm)
-	#target_basis.z = target_basis.x.cross(norm)
-	#target_basis = target_basis.orthonormalized()
+	#var surface_forward = global_transform.basis.z.cross(norm).normalized() # Always want + so player orientation doesnt effect rotation axis
+	#var rot_axis = surface_forward.cross(norm).normalized()
+	
+	var g = global_transform.basis
+	var proj_x = (g.x - ((g.x.dot(norm) / pow(norm.length(), 2)) * norm)).normalized()
+	var target_basis = global_transform.basis.rotated(proj_x, global_transform.basis.y.angle_to(norm))
 	
 	gravity_label.text = (
 		"Starting Basis: " + str(global_transform.basis) +
 		"\nRotation: " + str(rad_to_deg(global_transform.basis.y.angle_to(norm))) +
 		"\nNormal: " + str(norm) +
-		"\nSurface Y: " + str(surface_y) +
-		"\nRotation Axis: " + str(rot_axis) +
+		"\nProjected X: " + str(proj_x) +
+		#"\nSurface Forward: " + str(surface_forward) +
+		#"\nRotation Axis: " + str(rot_axis) +
 		"\nNormal Target: " + str(target_basis) +
 		"\nObject Basis: " + str(obj.global_transform.basis)
 	)
@@ -112,11 +110,14 @@ func change_gravity():
 	tween.tween_method(
 		func(weight: float):
 			global_transform.basis = start_basis.slerp(target_basis, weight),
-		0.0, 1.0, 0.5
+		0.0, 1.0, 0.25
 	)
 	tween.tween_callback(
 		func():
 			up_direction = global_transform.basis.y
+			gravity_dir = -up_direction
+			
+			vel_speed = abs(global_transform.basis.x * SPEED) + global_transform.basis.y * 0 + abs(global_transform.basis.z * SPEED)
 			apply_floor_snap()
 			await get_tree().create_timer(0.5).timeout
 			ray_cast_3d.enabled = true
