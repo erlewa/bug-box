@@ -114,19 +114,6 @@ mesh = SubResource("BoxMesh_l14r6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
-[node name="Wall6" type="StaticBody3D" parent="." unique_id=1042620945]
-transform = Transform3D(3.3927485e-08, 0.7761704, -0.63052326, 1, -4.371139e-08, 0, -2.7561047e-08, -0.63052326, -0.7761704, -18.28677, 16, 5.6484127)
-metadata/_edit_group_ = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall6" unique_id=767113208]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
-material_override = SubResource("StandardMaterial3D_jv3i5")
-mesh = SubResource("BoxMesh_l14r6")
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Wall6" unique_id=1107199310]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
-shape = SubResource("ConcavePolygonShape3D_7wnc2")
-
 [node name="Wall5" type="StaticBody3D" parent="." unique_id=1501275274]
 transform = Transform3D(1.9106855e-15, 4.3711385e-08, 0.99999994, 1, -4.3711385e-08, 0, 4.371139e-08, 0.99999994, -4.3711385e-08, 0, -8.081833, -9.530491)
 metadata/_edit_group_ = true
