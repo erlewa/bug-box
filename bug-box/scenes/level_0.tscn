@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="1_7wnc2"]
 [ext_resource type="Texture2D" uid="uid://b585s71sxu2f6" path="res://assets/mcgrass.png" id="1_rerym"]
 [ext_resource type="Texture2D" uid="uid://bkxx5jftt6qbf" path="res://assets/mccobble.png" id="2_uijja"]
+[ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="4_uijja"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5nv5w"]
 albedo_texture = ExtResource("1_rerym")
@@ -29,18 +30,35 @@ albedo_texture = ExtResource("2_uijja")
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1262491241]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+metadata/_edit_group_ = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1064364090]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
 material_override = SubResource("StandardMaterial3D_5nv5w")
 mesh = SubResource("BoxMesh_l14r6")
+metadata/_edit_group_ = true
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Floor" unique_id=1143151723]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
+[node name="Floor2" type="StaticBody3D" parent="." unique_id=1460159960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.875, -24.448)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor2" unique_id=645739848]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
+material_override = SubResource("StandardMaterial3D_5nv5w")
+mesh = SubResource("BoxMesh_l14r6")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Floor2" unique_id=194847877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
+shape = SubResource("ConcavePolygonShape3D_7wnc2")
+
 [node name="Wall1" type="StaticBody3D" parent="." unique_id=900262240]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 14, -16)
+metadata/_edit_group_ = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall1" unique_id=1248656921]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
@@ -53,6 +71,7 @@ shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
 [node name="Wall2" type="StaticBody3D" parent="." unique_id=752640484]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 15, 16, 1)
+metadata/_edit_group_ = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall2" unique_id=1612430133]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
@@ -63,8 +82,12 @@ mesh = SubResource("BoxMesh_l14r6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
+[node name="AxisDebug" parent="Wall2" unique_id=1792255886 instance=ExtResource("4_uijja")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33803082, 0)
+
 [node name="Wall3" type="StaticBody3D" parent="." unique_id=1681709929]
 transform = Transform3D(1.9106855e-15, 4.371139e-08, -1, 1, -4.371139e-08, 0, -4.371139e-08, -1, -4.371139e-08, -2, 16, 16)
+metadata/_edit_group_ = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall3" unique_id=743133257]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
@@ -75,8 +98,12 @@ mesh = SubResource("BoxMesh_l14r6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
+[node name="AxisDebug" parent="Wall3" unique_id=2009477934 instance=ExtResource("4_uijja")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3946638, 0)
+
 [node name="Wall4" type="StaticBody3D" parent="." unique_id=1991578441]
 transform = Transform3D(4.371139e-08, 1, 8.742278e-08, 1, -4.371139e-08, 0, 3.821371e-15, 8.742278e-08, -1, -17, 16, -1)
+metadata/_edit_group_ = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall4" unique_id=188552158]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
@@ -85,6 +112,19 @@ mesh = SubResource("BoxMesh_l14r6")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Wall4" unique_id=1870362423]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
+shape = SubResource("ConcavePolygonShape3D_7wnc2")
+
+[node name="Wall5" type="StaticBody3D" parent="." unique_id=1501275274]
+transform = Transform3D(1.9106855e-15, 4.3711385e-08, 0.99999994, 1, -4.3711385e-08, 0, 4.371139e-08, 0.99999994, -4.3711385e-08, 0, -8.081833, -9.530491)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall5" unique_id=868576150]
+transform = Transform3D(0.24133414, -3.5527137e-15, 2.1175824e-22, 0, 0.9999999, 3.5527137e-15, 0, -3.5527137e-15, 0.9999999, 10.099289, -0.2795744, -0.8879026)
+material_override = SubResource("StandardMaterial3D_jv3i5")
+mesh = SubResource("BoxMesh_l14r6")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Wall5" unique_id=1621699131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.827, 0.269, -0.926)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
 [node name="SpotLight3D2" type="SpotLight3D" parent="." unique_id=1799223686]
@@ -101,3 +141,6 @@ visible = false
 _spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
 spawn_path = NodePath(".")
 script = ExtResource("1_7wnc2")
+
+[node name="AxisDebug" parent="." unique_id=342122236 instance=ExtResource("4_uijja")]
+transform = Transform3D(7.16, 0, 0, 0, 7.16, 0, 0, 0, 7.16, 0, 5.987464, 0)
