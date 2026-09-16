@@ -58,8 +58,9 @@ func remove_multiplayer_peer():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players.clear()
 
-@rpc("authority", "reliable")
 func assign_roles():
+	if !multiplayer.is_server():
+		return
 		
 	var player_ids = players.keys()
 	var seeker_id = player_ids[randi() % player_ids.size()]
@@ -68,13 +69,15 @@ func assign_roles():
 		players[peer_id]["role"] = "seeker" if peer_id == seeker_id else "hider"
 	assign_roles_to_players.rpc(players)
 	
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func assign_roles_to_players(updated_players):
+	if !multiplayer.is_server():
+		return
 	players = updated_players
 	
 # When the server decides to start the game from a UI scene,
 # do Lobby.load_game.rpc(filepath)
-@rpc("authority", "reliable")
+@rpc("authority", "call_local", "reliable")
 func load_game(game_scene_path):
 	get_tree().change_scene_to_file(game_scene_path)
 
