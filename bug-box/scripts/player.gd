@@ -185,7 +185,8 @@ var _camera_rotation : Vector3
 @export var MOUSE_SENSITIVITY : float = 0.5 
 
 func _update_camera(delta):
-	
+	if !(local):
+		return
 	_mouse_rotation.x += _tilt_input * delta
 	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
 	_mouse_rotation.y = _rotation_input * delta
