@@ -75,6 +75,8 @@ func _physics_process(delta: float) -> void:
 		change_gravity.rpc_id(1)
 
 func _input(event: InputEvent) -> void:
+	if !(local):
+		return
 	if event.is_action_pressed("escape"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -82,6 +84,8 @@ func _input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event):
+	if !(local):
+		return
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
 	if _mouse_input :
 		var ri = -event.relative.x * MOUSE_SENSITIVITY
