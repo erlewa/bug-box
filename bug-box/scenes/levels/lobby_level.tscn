@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://13pjbvkins6l"]
 
-[ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="1_7wnc2"]
-[ext_resource type="Texture2D" uid="uid://b585s71sxu2f6" path="res://assets/mcgrass.png" id="1_rerym"]
-[ext_resource type="Texture2D" uid="uid://bkxx5jftt6qbf" path="res://assets/mccobble.png" id="2_uijja"]
-[ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="4_uijja"]
+[ext_resource type="Texture2D" uid="uid://b585s71sxu2f6" path="res://assets/mcgrass.png" id="1_013xv"]
+[ext_resource type="Texture2D" uid="uid://bkxx5jftt6qbf" path="res://assets/mccobble.png" id="2_mfas6"]
+[ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="3_a5umu"]
+[ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="4_xtmwt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5nv5w"]
-albedo_texture = ExtResource("1_rerym")
+albedo_texture = ExtResource("1_013xv")
 
 [sub_resource type="BoxMesh" id="BoxMesh_l14r6"]
 size = Vector3(32, 1, 32)
@@ -15,19 +15,19 @@ size = Vector3(32, 1, 32)
 data = PackedVector3Array(-16, 0.00049999997, 16, 16, 0.00049999997, 16, -16, -0.00049999997, 16, 16, 0.00049999997, 16, 16, -0.00049999997, 16, -16, -0.00049999997, 16, 16, 0.00049999997, -16, -16, 0.00049999997, -16, 16, -0.00049999997, -16, -16, 0.00049999997, -16, -16, -0.00049999997, -16, 16, -0.00049999997, -16, 16, 0.00049999997, 16, 16, 0.00049999997, -16, 16, -0.00049999997, 16, 16, 0.00049999997, -16, 16, -0.00049999997, -16, 16, -0.00049999997, 16, -16, 0.00049999997, -16, -16, 0.00049999997, 16, -16, -0.00049999997, -16, -16, 0.00049999997, 16, -16, -0.00049999997, 16, -16, -0.00049999997, -16, 16, 0.00049999997, 16, -16, 0.00049999997, 16, 16, 0.00049999997, -16, -16, 0.00049999997, 16, -16, 0.00049999997, -16, 16, 0.00049999997, -16, -16, -0.00049999997, 16, 16, -0.00049999997, 16, -16, -0.00049999997, -16, 16, -0.00049999997, 16, 16, -0.00049999997, -16, -16, -0.00049999997, -16)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uijja"]
-albedo_texture = ExtResource("2_uijja")
+albedo_texture = ExtResource("2_mfas6")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xp8tn"]
-albedo_texture = ExtResource("2_uijja")
+albedo_texture = ExtResource("2_mfas6")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rhhhf"]
-albedo_texture = ExtResource("2_uijja")
+albedo_texture = ExtResource("2_mfas6")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qjcqe"]
-albedo_texture = ExtResource("2_uijja")
+albedo_texture = ExtResource("2_mfas6")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jv3i5"]
-albedo_texture = ExtResource("2_uijja")
+albedo_texture = ExtResource("2_mfas6")
 
 [node name="level0" type="Node3D" unique_id=1937868015]
 
@@ -73,20 +73,6 @@ metadata/_edit_group_ = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
-[node name="Floor3" type="StaticBody3D" parent="." unique_id=458579457]
-transform = Transform3D(1.21, 0, 0, 0, 0.8555992, 0.8555992, 0, -0.8555992, 0.8555992, 0, 7.4375, 12.77)
-metadata/_edit_group_ = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor3" unique_id=1769673888]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, -0.2795748, -0.88790274)
-material_override = SubResource("StandardMaterial3D_5nv5w")
-mesh = SubResource("BoxMesh_l14r6")
-metadata/_edit_group_ = true
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Floor3" unique_id=1500501834]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
-shape = SubResource("ConcavePolygonShape3D_7wnc2")
-
 [node name="Wall1" type="StaticBody3D" parent="." unique_id=900262240]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 14, -16)
 metadata/_edit_group_ = true
@@ -113,7 +99,7 @@ mesh = SubResource("BoxMesh_l14r6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
-[node name="AxisDebug" parent="Wall2" unique_id=1792255886 instance=ExtResource("4_uijja")]
+[node name="AxisDebug" parent="Wall2" unique_id=1792255886 instance=ExtResource("3_a5umu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33803082, 0)
 
 [node name="Wall3" type="StaticBody3D" parent="." unique_id=1681709929]
@@ -129,7 +115,7 @@ mesh = SubResource("BoxMesh_l14r6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0484066, 0.21992517, -0.88790274)
 shape = SubResource("ConcavePolygonShape3D_7wnc2")
 
-[node name="AxisDebug" parent="Wall3" unique_id=2009477934 instance=ExtResource("4_uijja")]
+[node name="AxisDebug" parent="Wall3" unique_id=2009477934 instance=ExtResource("3_a5umu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3946638, 0)
 
 [node name="Wall4" type="StaticBody3D" parent="." unique_id=1991578441]
@@ -171,7 +157,7 @@ visible = false
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=2084917811]
 _spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
 spawn_path = NodePath(".")
-script = ExtResource("1_7wnc2")
+script = ExtResource("4_xtmwt")
 
-[node name="AxisDebug" parent="." unique_id=342122236 instance=ExtResource("4_uijja")]
+[node name="AxisDebug" parent="." unique_id=342122236 instance=ExtResource("3_a5umu")]
 transform = Transform3D(7.16, 0, 0, 0, 7.16, 0, 0, 0, 7.16, 0, 5.987464, 0)

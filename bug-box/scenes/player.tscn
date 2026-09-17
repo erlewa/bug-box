@@ -75,6 +75,14 @@ offset_right = 50.0
 offset_bottom = 167.0
 vertical_alignment = 1
 
+[node name="PlayerLabel" type="Label" parent="Debug" unique_id=1551562427]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 80.0
+offset_right = 50.0
+offset_bottom = 103.0
+
 [node name="GravityLabel" type="Label" parent="Debug" unique_id=36066043]
 unique_name_in_owner = true
 layout_mode = 1
@@ -89,5 +97,5 @@ text = "Grav Label"
 [node name="bug" parent="." unique_id=1402643095 instance=ExtResource("2_g2els")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.014466524, -0.034721255, 1.2972248)
 
-[node name="AxisDebug2" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
+[node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)
