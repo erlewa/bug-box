@@ -109,7 +109,7 @@ func change_gravity():
 	
 	tween.tween_method(
 		func(weight: float):
-			global_transform.basis = start_basis.slerp(target_basis, weight),
+			global_transform.basis = start_basis.slerp(target_basis.orthonormalized(), weight),
 		0.0, 1.0, 0.25
 	)
 	tween.tween_callback(
