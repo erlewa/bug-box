@@ -9,6 +9,19 @@ class_name Player
 @onready var debug: Control = %Debug
 @onready var gravity_label: Label = %GravityLabel
 
+var _mouse_input : bool = false
+var _mouse_rotation : Vector3
+var _rotation_input : float
+var _tilt_input : float
+var _player_rotation : Vector3
+var _camera_rotation : Vector3
+
+@export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
+@export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
+@export var CAMERA_CONTROLLER : Camera3D
+@export var MOUSE_SENSITIVITY : float = 0.5 
+
+
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
@@ -71,9 +84,16 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event):
 	_mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
 	if _mouse_input :
-		_rotation_input = -event.relative.x * MOUSE_SENSITIVITY
-		_tilt_input = -event.relative.y * MOUSE_SENSITIVITY
+		var ri = -event.relative.x * MOUSE_SENSITIVITY
+		var ti = -event.relative.y * MOUSE_SENSITIVITY
+		update_camera_input.rpc_id(1, ri, ti)
+		
 
+@rpc("any_peer", "call_local", "reliable")
+func update_camera_input(rotation_input, tilt_input):
+	_rotation_input = rotation_input
+	_tilt_input = tilt_input
+	
 @rpc("any_peer", "call_local", "reliable", 0)
 func change_gravity():
 	if !(multiplayer.is_server()):
@@ -176,23 +196,12 @@ func process_physics(delta, input_dir, jump):
 	
 	move_and_slide()
 
-
-var _mouse_input : bool = false
-var _mouse_rotation : Vector3
-var _rotation_input : float
-var _tilt_input : float
-var _player_rotation : Vector3
-var _camera_rotation : Vector3
-
-
-@export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
-@export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
-@export var CAMERA_CONTROLLER : Camera3D
-@export var MOUSE_SENSITIVITY : float = 0.5 
-
 func _update_camera(delta):
-	if !(local):
+	if !(multiplayer.is_server()):
 		return
+	print("Updating Camera: ", str(peer_id), 
+		  "_rotation_input: ", str(_rotation_input),
+		  "_tilt_input: ", str(_tilt_input))
 	_mouse_rotation.x += _tilt_input * delta
 	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
 	_mouse_rotation.y = _rotation_input * delta

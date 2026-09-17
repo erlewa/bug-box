@@ -20,6 +20,9 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath(".:gravity_dir")
 properties/4/spawn = true
 properties/4/replication_mode = 1
+properties/5/path = NodePath("Camera3D:rotation")
+properties/5/spawn = true
+properties/5/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_021oi"]
 radius = 0.34716797
