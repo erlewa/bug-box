@@ -22,7 +22,7 @@ var players = {}
 var player_info = {"name": "Name", "role": "hider"}
 
 var players_loaded = 0
-
+var players_ready = 0
 
 
 func _ready():
@@ -44,6 +44,7 @@ func join_game(address = ""):
 
 
 func create_game():
+	print("Creating Game")
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(PORT, MAX_CONNECTIONS)
 	if error:
@@ -57,23 +58,6 @@ func create_game():
 func remove_multiplayer_peer():
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players.clear()
-
-func assign_roles():
-	if !multiplayer.is_server():
-		return
-		
-	var player_ids = players.keys()
-	var seeker_id = player_ids[randi() % player_ids.size()]
-	
-	for peer_id in player_ids:
-		players[peer_id]["role"] = "seeker" if peer_id == seeker_id else "hider"
-	assign_roles_to_players.rpc(players)
-	
-@rpc("any_peer", "call_local", "reliable")
-func assign_roles_to_players(updated_players):
-	if !multiplayer.is_server():
-		return
-	players = updated_players
 	
 # When the server decides to start the game from a UI scene,
 # do Lobby.load_game.rpc(filepath)
@@ -83,19 +67,29 @@ func load_game(game_scene_path):
 
 
 # Every peer will call this when they have loaded the game scene.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func player_loaded():
 	if multiplayer.is_server():
+		print("Server recieved player loaded")
 		players_loaded += 1
+		print("Players loaded: ", str(players_loaded))
 		if players_loaded == players.size():
-			print("Game Should Start now!")
+			print("All ", str(players.size()), " Players Loaded")
+
+# Every peer will call this when they have readied up from lobby.
+@rpc("any_peer", "call_local", "reliable")
+func player_ready(ready_up: bool):
+	if multiplayer.is_server():
+		players_ready += (1 if ready_up else -1)
+		print("Players Ready After: ", str(players_ready))
+		if players.size() > 1 and players_ready == players.size():
+			GameController.start_game.rpc()
 
 
 # When a peer connects, send them my player info.
 # This allows transfer of all desired data for each player, not only the unique ID.
 func _on_player_connected(id):
 	_register_player.rpc_id(id, player_info)
-
 
 @rpc("any_peer", "reliable")
 func _register_player(new_player_info):
@@ -106,7 +100,6 @@ func _register_player(new_player_info):
 func _on_player_disconnected(id):
 	players.erase(id)
 	player_disconnected.emit(id)
-
 
 func _on_connected_ok():
 	var peer_id = multiplayer.get_unique_id()

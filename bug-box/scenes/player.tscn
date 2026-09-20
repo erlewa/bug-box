@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c7bisibikqqxe" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://drhydi04xhywx" path="res://assets/bug.glb" id="2_g2els"]
 [ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="3_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://dqg3ffnjlfjwv" path="res://scenes/hud.tscn" id="4_dqkch"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3vyb7"]
 properties/0/path = NodePath(".:peer_id")
@@ -23,6 +24,12 @@ properties/4/replication_mode = 1
 properties/5/path = NodePath("Camera3D:rotation")
 properties/5/spawn = true
 properties/5/replication_mode = 1
+properties/6/path = NodePath("Debug/GravityLabel:text")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("Debug/PhysicsLabel:text")
+properties/7/spawn = true
+properties/7/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_021oi"]
 radius = 0.34716797
@@ -102,3 +109,7 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.014466524, -0.0347212
 
 [node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)
+
+[node name="HUD" parent="." unique_id=1671398121 instance=ExtResource("4_dqkch")]
+
+[connection signal="ready_up" from="HUD" to="." method="_on_hud_ready_up"]

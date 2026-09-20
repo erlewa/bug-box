@@ -25,19 +25,13 @@ var _camera_rotation : Vector3
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
-
 @export var peer_id: int = 1 # The peer that controls this player
 @export var role: String = "hider"
 var local: bool = true # If this player belongs to the local peer
 @export var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-func _enter_tree() -> void:
-	# Set node authority
-	
-	print("IN _enter_tree():\n\tPlayer peer_id: " + str(peer_id) 
-	+ "\n\tMultiplayer Unique id: " + str(multiplayer.get_unique_id()) 
-	+ "\n\tLocal: " + str(local))
+var ready_up: bool = false
 
 func _ready() -> void:
 	print("IN _ready():\n\tPlayer peer_id: " + str(peer_id) 
@@ -56,7 +50,7 @@ func _process(delta: float) -> void:
 		"Basis: " + str(global_transform.basis) +
 		"\nGravity Dir: " + str(gravity_dir)
 	)
-	if Input.is_action_just_pressed("debug_mode"):
+	if Input.is_action_just_pressed("debug_mode") and local:
 		debug.visible = !debug.visible
 		
 	player_label.text = (
@@ -68,7 +62,7 @@ func _physics_process(delta: float) -> void:
 	if !(local):
 		return
 	var input_dir := Input.get_vector("left", "right", "up", "down")
-	var jump = Input.is_action_just_pressed("ui_accept")
+	var jump = Input.is_action_just_pressed("jump")
 	process_physics.rpc_id(1, delta, input_dir, jump)
 	
 	if 	ray_cast_3d.is_colliding():
@@ -203,9 +197,6 @@ func process_physics(delta, input_dir, jump):
 func _update_camera(delta):
 	if !(multiplayer.is_server()):
 		return
-	print("Updating Camera: ", str(peer_id), 
-		  "_rotation_input: ", str(_rotation_input),
-		  "_tilt_input: ", str(_tilt_input))
 	_mouse_rotation.x += _tilt_input * delta
 	_mouse_rotation.x = clamp(_mouse_rotation.x, TILT_LOWER_LIMIT, TILT_UPPER_LIMIT)
 	_mouse_rotation.y = _rotation_input * delta
@@ -220,3 +211,9 @@ func _update_camera(delta):
 	
 	_rotation_input = 0.0
 	_tilt_input = 0.0
+
+func _on_hud_ready_up() -> void:
+	print("READY UP!")
+	ready_up = !ready_up
+	print("Ready State: ", str(ready_up))
+	Lobby.player_ready.rpc_id(1, ready_up)

@@ -1,15 +1,14 @@
 extends Control
-const LOBBY = preload("uid://13pjbvkins6l")
-@onready var ip_input: TextEdit = %IPInput
 
-func load_lobby():
-	get_tree().change_scene_to_packed(LOBBY)
+signal load_level(Resource)
+
+@onready var ip_input: TextEdit = %IPInput
 
 func _on_join_pressed() -> void:
 	Lobby.join_game(ip_input.text)
-	load_lobby()
-
+	emit_signal("load_level", Globals.LOBBY_LEVEL)
 
 func _on_host_pressed() -> void:
 	Lobby.create_game()
-	load_lobby()
+	print("Emitting load_level(LOBBY)")
+	emit_signal("load_level", Globals.LOBBY_LEVEL)
