@@ -30,6 +30,9 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath("Debug/PhysicsLabel:text")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+properties/8/path = NodePath(".:role")
+properties/8/spawn = true
+properties/8/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_021oi"]
 radius = 0.34716797

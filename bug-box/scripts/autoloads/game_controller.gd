@@ -56,11 +56,12 @@ func assign_roles_to_players(updated_players):
 ################
 #  Start Game  #
 ################
+
 @rpc("authority", "call_local", "reliable")
 func start_game():
+	Lobby.players_loaded = 0
 	# Assign Roles
 	assign_roles()
 	
 	# Select Level
-	# TO-DO: Add random level selection
 	goto_scene(Globals.LEVEL_0)

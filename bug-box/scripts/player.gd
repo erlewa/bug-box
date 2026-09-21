@@ -42,6 +42,7 @@ func _ready() -> void:
 	if (local):
 		# Activate the camera if local
 		$Camera3D.make_current()
+		Lobby.player_loaded.rpc_id(1)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -54,8 +55,10 @@ func _process(delta: float) -> void:
 		debug.visible = !debug.visible
 		
 	player_label.text = (
-		"Name: " + str(self.name) +
-		"\nRole: " + str(self.role)
+		"MP ID: " + str(multiplayer.get_unique_id()) +
+		"\nName: " + str(self.name) +
+		"\nRole: " + str(self.role) +
+		"\nRoles: " + str(Lobby.players)
 	)
 	
 func _physics_process(delta: float) -> void:
@@ -167,14 +170,14 @@ func process_physics(delta, input_dir, jump):
 		
 	var direction: Vector3 = (global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized() + abs(global_transform.basis.y)
 	
-	physics_label.text = (
-		"Input_dir: " + str(input_dir) +
-		"\nDirection: " + str(direction) +
-		"\nVel Speed: " + str(vel_speed) + 
-		"\nD*VS (Velocity): " + str(direction * vel_speed) +
-		"\nOn Ground: " + str(is_on_floor()) +
-		"\nUp Direction: " + str(up_direction)
-	)
+	#physics_label.text = (
+		#"Input_dir: " + str(input_dir) +
+		#"\nDirection: " + str(direction) +
+		#"\nVel Speed: " + str(vel_speed) + 
+		#"\nD*VS (Velocity): " + str(direction * vel_speed) +
+		#"\nOn Ground: " + str(is_on_floor()) +
+		#"\nUp Direction: " + str(up_direction)
+	#)
 	
 	if direction:
 		velocity = direction * vel_speed
@@ -213,7 +216,6 @@ func _update_camera(delta):
 	_tilt_input = 0.0
 
 func _on_hud_ready_up() -> void:
-	print("READY UP!")
 	ready_up = !ready_up
 	print("Ready State: ", str(ready_up))
 	Lobby.player_ready.rpc_id(1, ready_up)
