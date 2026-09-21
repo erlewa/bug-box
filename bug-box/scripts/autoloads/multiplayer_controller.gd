@@ -73,8 +73,9 @@ func player_loaded():
 		print("Server recieved player loaded")
 		players_loaded += 1
 		print("Players loaded: ", str(players_loaded))
-		if players_loaded == players.size():
+		if players_loaded == players.size() && Globals.game_starting:
 			print("All ", str(players.size()), " Players Loaded")
+			GameController.start_game.rpc()
 
 # Every peer will call this when they have readied up from lobby.
 @rpc("any_peer", "call_local", "reliable")
@@ -83,7 +84,7 @@ func player_ready(ready_up: bool):
 		players_ready += (1 if ready_up else -1)
 		print("Players Ready After: ", str(players_ready))
 		if players.size() > 1 and players_ready == players.size():
-			GameController.start_game.rpc()
+			GameController.transition_to_level.rpc()
 
 
 # When a peer connects, send them my player info.

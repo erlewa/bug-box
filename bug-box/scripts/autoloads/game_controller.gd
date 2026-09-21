@@ -57,11 +57,22 @@ func assign_roles_to_players(updated_players):
 #  Start Game  #
 ################
 
+# Called when all players have pressed "Ready Up" from lobby
 @rpc("authority", "call_local", "reliable")
-func start_game():
+func transition_to_level():
+	# Modify Game State
+	Globals.game_starting = true
 	Lobby.players_loaded = 0
+	
 	# Assign Roles
 	assign_roles()
 	
 	# Select Level
 	goto_scene(Globals.LEVEL_0)
+
+# Called when all players have succesfully loaded into the level
+@rpc("authority", "call_local", "reliable")
+func start_game():
+	Globals.game_starting = false
+	print("GAME STARTING NOW!")
+	# TO-DO: Add game starting logic, ie. give hiders some time to run away do something with the seekers

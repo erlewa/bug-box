@@ -114,5 +114,6 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.014466524, -0.0347212
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)
 
 [node name="HUD" parent="." unique_id=1671398121 instance=ExtResource("4_dqkch")]
+unique_name_in_owner = true
 
 [connection signal="ready_up" from="HUD" to="." method="_on_hud_ready_up"]

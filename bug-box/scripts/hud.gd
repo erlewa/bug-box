@@ -19,3 +19,7 @@ func _on_ready_button_pressed() -> void:
 	emit_signal("ready_up")
 	ready_state = !ready_state
 	ready_button.add_theme_stylebox_override("normal", base_style if !ready else ready_style)
+
+func hide_ready_button():
+	print("Hiding ready button")
+	ready_button.visible = false

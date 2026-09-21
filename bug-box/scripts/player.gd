@@ -8,6 +8,7 @@ class_name Player
 @onready var player_label: Label = %PlayerLabel
 @onready var debug: Control = %Debug
 @onready var gravity_label: Label = %GravityLabel
+@onready var hud: Control = %HUD
 
 var _mouse_input : bool = false
 var _mouse_rotation : Vector3
@@ -42,8 +43,10 @@ func _ready() -> void:
 	if (local):
 		# Activate the camera if local
 		$Camera3D.make_current()
+		print(Globals.game_starting)
+		if Globals.game_starting:
+			hud.hide_ready_button()
 		Lobby.player_loaded.rpc_id(1)
-	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _process(delta: float) -> void:
