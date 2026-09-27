@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dqg3ffnjlfjwv"]
 
 [ext_resource type="Script" uid="uid://cjvda4rrirq1g" path="res://scripts/hud.gd" id="1_ahhtf"]
+[ext_resource type="Theme" uid="uid://de83ativvs07d" path="res://assets/hud_theme.tres" id="2_oo0fn"]
 
 [node name="HUD" type="Control" unique_id=1671398121]
 layout_mode = 3
@@ -26,6 +27,8 @@ offset_right = -29.999023
 offset_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
+theme = ExtResource("2_oo0fn")
+toggle_mode = true
 text = "Ready Up"
 icon_alignment = 2
 
