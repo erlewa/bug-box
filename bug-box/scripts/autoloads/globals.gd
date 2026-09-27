@@ -1,4 +1,5 @@
-# Autoload singleton to handle global game state and variables
+# Autoload singleton to handle global game state and variables, values retained across
+#   scene changes
 extends Node
 
 ###############
