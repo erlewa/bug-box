@@ -17,7 +17,7 @@ config/icon="res://assets/icon.svg"
 
 [autoload]
 
-Lobby="*uid://yk3lwin4wu88"
+MultiplayerController="*uid://yk3lwin4wu88"
 GameController="*uid://b3u512djuamnr"
 Globals="*uid://epbsao4t7x2j"
 

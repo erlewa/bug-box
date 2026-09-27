@@ -48,9 +48,10 @@ func _ready() -> void:
 		
 		# HUD should only exist on each client
 		hud = HUD.instantiate()
+		hud.ready_up.connect(_on_hud_ready_up)
 		add_child(hud)
 		
-		Lobby.player_loaded.rpc_id(1)
+		MultiplayerController.player_loaded.rpc_id(1)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _process(delta: float) -> void:
@@ -65,7 +66,7 @@ func _process(delta: float) -> void:
 		"MP ID: " + str(multiplayer.get_unique_id()) +
 		"\nName: " + str(self.name) +
 		"\nRole: " + str(self.role) +
-		"\nRoles: " + str(Lobby.players)
+		"\nRoles: " + str(MultiplayerController.players)
 	)
 	
 func _physics_process(delta: float) -> void:
@@ -225,4 +226,4 @@ func _update_camera(delta):
 func _on_hud_ready_up() -> void:
 	ready_up = !ready_up
 	print("Ready State: ", str(ready_up))
-	Lobby.player_ready.rpc_id(1, ready_up)
+	MultiplayerController.player_ready.rpc_id(1, ready_up)

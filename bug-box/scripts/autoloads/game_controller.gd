@@ -1,6 +1,8 @@
 # Handles changing game state, ie. swaping levels, starting game
 extends Node
 
+signal game_start
+
 var current_scene: Node
 
 func _ready() -> void:
@@ -38,20 +40,20 @@ func assign_roles():
 	if !multiplayer.is_server():
 		return
 		
-	var player_ids = Lobby.players.keys()
+	var player_ids = MultiplayerController.players.keys()
 	var seeker_id = player_ids[randi() % player_ids.size()]
 	
 	for peer_id in player_ids:
-		Lobby.players[peer_id]["role"] = "seeker" if peer_id == seeker_id else "hider"
-	assign_roles_to_players.rpc(Lobby.players)
+		MultiplayerController.players[peer_id]["role"] = "seeker" if peer_id == seeker_id else "hider"
+	assign_roles_to_players.rpc(MultiplayerController.players)
 	
 @rpc("any_peer", "call_local", "reliable")
 func assign_roles_to_players(updated_players):
 	# Check that server initiated
 	if multiplayer.get_remote_sender_id() != 1:
 		return
-	Lobby.players = updated_players
-	print(str(multiplayer.get_unique_id()), ": ", Lobby.players)
+	MultiplayerController.players = updated_players
+	print(str(multiplayer.get_unique_id()), ": ", MultiplayerController.players)
 
 ################
 #  Start Game  #
@@ -62,7 +64,7 @@ func assign_roles_to_players(updated_players):
 func transition_to_level():
 	# Modify Game State
 	Globals.game_starting = true
-	Lobby.players_loaded = 0
+	MultiplayerController.players_loaded = 0
 	
 	# Assign Roles
 	assign_roles()
@@ -74,5 +76,6 @@ func transition_to_level():
 @rpc("authority", "call_local", "reliable")
 func start_game():
 	Globals.game_starting = false
+	emit_signal("game_start")
 	print("GAME STARTING NOW!")
 	# TO-DO: Add game starting logic, ie. give hiders some time to run away do something with the seekers
