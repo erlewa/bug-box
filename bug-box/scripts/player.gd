@@ -48,8 +48,9 @@ func _ready() -> void:
 		
 		# HUD should only exist on each client
 		hud = HUD.instantiate()
-		hud.ready_up.connect(_on_hud_ready_up)
 		add_child(hud)
+		
+		Globals.ready_up.connect(_on_hud_ready_up)
 		
 		MultiplayerController.player_loaded.rpc_id(1)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

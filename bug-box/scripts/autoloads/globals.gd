@@ -16,3 +16,9 @@ const MAIN_MENU = "res://scenes/levels/main_menu.tscn"
 ################
 
 var game_starting: bool = false
+
+#############
+#  Signals  #
+#############
+
+signal ready_up
