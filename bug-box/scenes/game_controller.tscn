@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://fcnvu6870a2j"]
+
+[ext_resource type="Script" uid="uid://b3u512djuamnr" path="res://scripts/autoloads/game_controller.gd" id="1_vc4nx"]
+[ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="2_ts4rt"]
+
+[node name="GameController" type="Node" unique_id=2033776992]
+script = ExtResource("1_vc4nx")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1354241887]
+unique_name_in_owner = true
+_spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
+spawn_path = NodePath(".")
+script = ExtResource("2_ts4rt")
+
+[node name="DebugButton" type="Button" parent="." unique_id=1113599054]
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Spawn Players"
+
+[connection signal="pressed" from="DebugButton" to="." method="spawn_players"]

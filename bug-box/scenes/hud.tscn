@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dqg3ffnjlfjwv"]
+
+[ext_resource type="Script" uid="uid://cjvda4rrirq1g" path="res://scripts/hud/hud.gd" id="1_ahhtf"]
+[ext_resource type="Theme" uid="uid://de83ativvs07d" path="res://assets/hud_theme.tres" id="2_oo0fn"]
+[ext_resource type="Script" uid="uid://c8h7li7dxur76" path="res://scripts/state_machine.gd" id="3_6fi6k"]
+[ext_resource type="Script" uid="uid://gfo6p0mjqk43" path="res://scripts/hud/states/lobby.gd" id="4_uo2fv"]
+[ext_resource type="Script" uid="uid://csqa1vlivq2fo" path="res://scripts/hud/states/match.gd" id="5_uo2fv"]
+
+[node name="HUD" type="Control" unique_id=1671398121]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_ahhtf")
+
+[node name="ReadyButton" type="Button" parent="." unique_id=163573665]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -152.0
+offset_top = -51.0
+offset_right = -29.999023
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_oo0fn")
+toggle_mode = true
+text = "Ready Up"
+icon_alignment = 2
+
+[node name="StateMachine" type="Node" parent="." unique_id=434036286 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_6fi6k")
+initial_state = NodePath("Lobby")
+
+[node name="Lobby" type="Node" parent="StateMachine" unique_id=2048424642]
+script = ExtResource("4_uo2fv")
+
+[node name="Match" type="Node" parent="StateMachine" unique_id=1320094962]
+script = ExtResource("5_uo2fv")
+
+[connection signal="pressed" from="ReadyButton" to="." method="_on_ready_button_pressed"]
