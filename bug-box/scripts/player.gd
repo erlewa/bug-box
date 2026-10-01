@@ -2,6 +2,11 @@ extends CharacterBody3D
 class_name Player
 
 const HUD = preload("uid://dqg3ffnjlfjwv")
+var plainbug = preload("res://scenes/bugs/plainbug.tscn")
+var ladybug = preload("res://scenes/bugs/ladybug.tscn")
+
+var bugModels = [plainbug, ladybug]
+var currBugIndex = 0
 
 # https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
 @onready var ray_cast_3d: RayCast3D = %RayCast3D
@@ -37,17 +42,22 @@ var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
 var ready_up: bool = false
 
 func _ready() -> void:
+	
 	print("IN _ready():\n\tPlayer peer_id: " + str(peer_id) 
 	+ "\n\tMultiplayer Unique id: " + str(multiplayer.get_unique_id()) 
 	+ "\n\tLocal: " + str(local)
 	+ "\n**********\n")
 	local = (peer_id == multiplayer.get_unique_id())
 	if (local):
+		# Initialize model as plainbug
+		change_bug(plainbug)
+		
 		# Activate the camera if local
 		$Camera3D.make_current()
 		
 		# HUD should only exist on each client
 		hud = HUD.instantiate()
+		hud.change_bug.connect(alternate_bug)
 		add_child(hud)
 		
 		Globals.ready_up.connect(_on_hud_ready_up)
@@ -155,7 +165,6 @@ func change_gravity():
 			
 			vel_speed = abs(global_transform.basis.x * SPEED) + global_transform.basis.y * 0 + abs(global_transform.basis.z * SPEED)
 			apply_floor_snap()
-			await get_tree().create_timer(0.5).timeout
 			ray_cast_3d.enabled = true
 	)
 
@@ -228,3 +237,32 @@ func _on_hud_ready_up() -> void:
 	ready_up = !ready_up
 	print("Ready State: ", str(ready_up))
 	MultiplayerController.player_ready.rpc_id(1, ready_up)
+
+@rpc("any_peer", "call_local", "reliable", 0)
+func change_bug(scene: PackedScene) -> void:
+	print("CHANGE BUG")
+	print("old children")
+	for child in get_children():
+		print("	", child.name, child)
+	var old_bug = $Bug
+	
+	var new_bug: Bug = scene.instantiate()
+	
+	new_bug.name = "Bug"
+	
+	remove_child(old_bug)
+	old_bug.call_deferred("queue_free")
+	
+	add_child(new_bug)
+	print("new children")
+	for child in get_children():
+		print("	", child.name, child)
+
+func alternate_bug() -> void:
+	print("ALTERNATE BUG")
+	currBugIndex += 1
+	if currBugIndex >= bugModels.size():
+		currBugIndex = 0
+	print(currBugIndex)
+	print(bugModels[currBugIndex])
+	change_bug(bugModels[currBugIndex])

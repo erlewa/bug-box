@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cad3tk841gia0"]
 
 [ext_resource type="Script" uid="uid://c7bisibikqqxe" path="res://scripts/player.gd" id="1_3vyb7"]
-[ext_resource type="PackedScene" uid="uid://drhydi04xhywx" path="res://assets/bug.glb" id="2_g2els"]
+[ext_resource type="Script" uid="uid://cbmdgi5uxqqml" path="res://scripts/bug.gd" id="2_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="3_qhqgy"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3vyb7"]
@@ -33,9 +33,7 @@ properties/8/path = NodePath(".:role")
 properties/8/spawn = true
 properties/8/replication_mode = 1
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_021oi"]
-radius = 0.34716797
-height = 2.265747
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pnx1e"]
 
 [node name="Player" type="CharacterBody3D" unique_id=216894610 node_paths=PackedStringArray("CAMERA_CONTROLLER")]
 script = ExtResource("1_3vyb7")
@@ -47,16 +45,20 @@ replication_config = SubResource("SceneReplicationConfig_3vyb7")
 [node name="ClientSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=766818782]
 replication_config = SubResource("SceneReplicationConfig_3vyb7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1484261188]
-transform = Transform3D(1.9106855e-15, -4.3711385e-08, 0.99999994, -1, -4.3711385e-08, 0, 4.371139e-08, -0.99999994, -4.3711385e-08, -0.046447754, 0.28323197, 1.3900461)
-shape = SubResource("CapsuleShape3D_021oi")
-
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1787981846]
 transform = Transform3D(1, 0, 0, 0, 0.9100582, 0.41448048, 0, -0.41448048, 0.9100582, 0, 1.4006497, 2.2464137)
 
 [node name="RayCast3D" type="RayCast3D" parent="." unique_id=2126956000]
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -1)
+
+[node name="Bug" type="Node3D" parent="." unique_id=2024921099]
+script = ExtResource("2_qhqgy")
+metadata/_custom_type_script = "uid://cbmdgi5uxqqml"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=872937479]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 1.0404663)
+shape = SubResource("CapsuleShape3D_pnx1e")
 
 [node name="Debug" type="Control" parent="." unique_id=159988412]
 unique_name_in_owner = true
@@ -105,9 +107,6 @@ offset_top = -23.0
 offset_right = 83.0
 grow_vertical = 0
 text = "Grav Label"
-
-[node name="bug" parent="." unique_id=1402643095 instance=ExtResource("2_g2els")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.014466524, -0.034721255, 1.2972248)
 
 [node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)

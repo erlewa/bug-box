@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bvvtq6w1exuky"]
+
+[ext_resource type="PackedScene" uid="uid://drhydi04xhywx" path="res://assets/bug.glb" id="1_306jd"]
+[ext_resource type="Script" uid="uid://c4tat5t2xgp6l" path="res://scenes/bugs/plainbug.gd" id="1_xfhp5"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_leyn4"]
+radius = 6.909
+height = 104.288
+
+[node name="Node3D" type="Node3D" unique_id=1085006297]
+script = ExtResource("1_xfhp5")
+collision_shape = SubResource("CapsuleShape3D_leyn4")
+
+[node name="bug" parent="." unique_id=1402643095 instance=ExtResource("1_306jd")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.10442567, -0.034721255, 1.5283254)

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b06uberoff7q1"]
+
+[ext_resource type="Script" uid="uid://5suhmu4vc1si" path="res://scenes/bugs/ladybug.gd" id="1_n5hqm"]
+[ext_resource type="PackedScene" uid="uid://dl0oqa2diktmu" path="res://assets/ladybug.glb" id="2_5gix7"]
+
+[node name="Ladybug" type="Node3D" unique_id=1322174473]
+script = ExtResource("1_n5hqm")
+
+[node name="ladybug" parent="." unique_id=2096589353 instance=ExtResource("2_5gix7")]
+transform = Transform3D(0.24, 0, 0, 0, 0.24, 0, 0, 0, 0.24, 0.0037510395, -0.026700258, 2.4137757)
