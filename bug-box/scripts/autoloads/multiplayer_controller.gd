@@ -7,6 +7,9 @@ signal player_connected(peer_id, player_info)
 signal player_disconnected(peer_id)
 signal server_disconnected
 
+signal peer_level_loaded(peer_id)
+var loaded_peers := {}
+
 const PORT = 7000
 const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
 const MAX_CONNECTIONS = 20
@@ -19,7 +22,7 @@ var players = {}
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
 # entered in a UI scene.
-var player_info = {"name": "Name", "role": "hider"}
+var player_info = {"name": "Name", "role": "none"}
 
 var players_loaded = 0
 var players_ready = 0
@@ -51,8 +54,8 @@ func create_game():
 		return error
 	multiplayer.multiplayer_peer = peer
 
-	players[1] = player_info
-	player_connected.emit(1, player_info)
+	players[1] = player_info.duplicate()
+	player_connected.emit(1, players[1])
 
 
 func remove_multiplayer_peer():
@@ -104,8 +107,8 @@ func _on_player_disconnected(id):
 
 func _on_connected_ok():
 	var peer_id = multiplayer.get_unique_id()
-	players[peer_id] = player_info
-	player_connected.emit(peer_id, player_info)
+	players[peer_id] = player_info.duplicate()
+	player_connected.emit(peer_id, players[peer_id])
 
 
 func _on_connected_fail():
@@ -116,3 +119,11 @@ func _on_server_disconnected():
 	remove_multiplayer_peer()
 	players.clear()
 	server_disconnected.emit()
+
+@rpc("any_peer", "reliable")
+func report_level_loaded():
+	if !multiplayer.is_server():
+		return
+	var id = multiplayer.get_remote_sender_id()
+	loaded_peers[id] = true
+	peer_level_loaded.emit(id)
