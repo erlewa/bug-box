@@ -37,6 +37,9 @@ properties/8/replication_mode = 1
 radius = 0.34716797
 height = 2.265747
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_tdnfp"]
+radius = 1.5
+
 [node name="Player" type="CharacterBody3D" unique_id=216894610 node_paths=PackedStringArray("CAMERA_CONTROLLER")]
 script = ExtResource("1_3vyb7")
 CAMERA_CONTROLLER = NodePath("Camera3D")
@@ -111,3 +114,10 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.014466524, -0.0347212
 
 [node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)
+
+[node name="TagArea" type="Area3D" parent="." unique_id=1018431661]
+unique_name_in_owner = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TagArea" unique_id=203214567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+shape = SubResource("SphereShape3D_tdnfp")
