@@ -20,6 +20,10 @@ var _tilt_input : float
 var _player_rotation : Vector3
 var _camera_rotation : Vector3
 
+var eliminated: bool:
+	get:
+		return MultiplayerController.players.get(peer_id, {}).get("eliminated", false)
+
 @export var TILT_LOWER_LIMIT := deg_to_rad(-90.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(90.0)
 @export var CAMERA_CONTROLLER : Camera3D
@@ -53,6 +57,7 @@ func _ready() -> void:
 		# HUD should only exist on each client
 		hud = HUD.instantiate()
 		add_child(hud)
+		GameController.player_tagged.connect(hud.on_player_tagged)
 		
 		Globals.ready_up.connect(_on_hud_ready_up)
 		
@@ -68,6 +73,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if local and hud:
 		hud.set_role(role)
+		hud.set_hiders_left(GameController.count_hiders() if role != "none" else -1)
 	basis_label.text = (
 		"Basis: " + str(global_transform.basis) +
 		"\nGravity Dir: " + str(gravity_dir)
@@ -89,9 +95,9 @@ func _physics_process(delta: float) -> void:
 		_dbg_t += delta
 		if _dbg_t > 1.0:
 			_dbg_t = 0.0
-			print("[", name, "] round_active=", GameController.round_active,
-				" role=", role, " mask=", tag_area.collision_mask,
-				" overlaps=", tag_area.get_overlapping_bodies())
+			#print("[", name, "] round_active=", GameController.round_active,
+				#" role=", role, " mask=", tag_area.collision_mask,
+				#" overlaps=", tag_area.get_overlapping_bodies())
 	if !(local) or frozen:
 		return
 	var input_dir := Input.get_vector("left", "right", "up", "down")
@@ -105,9 +111,8 @@ func _check_tags() -> void:
 	if !GameController.round_active or role != "seeker":
 		return
 	for body in tag_area.get_overlapping_bodies():
-		if body is Player and body != self and body.role == "hider":
-			GameController.end_round("seeker", peer_id, body.peer_id)
-			return
+		if body is Player and body != self and body.role == "hider" and not body.eliminated:
+			GameController.tag_player(peer_id, body.peer_id)
 
 func _input(event: InputEvent) -> void:
 	if !(local):

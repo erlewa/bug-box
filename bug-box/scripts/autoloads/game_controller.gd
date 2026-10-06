@@ -5,6 +5,8 @@ signal game_start
 
 signal round_over(winning_role: String, tagger_id: int, tagged_id: int)
 signal round_started
+signal player_tagged(tagger_id: int, tagged_id: int, hiders_left: int)
+
 var round_active: bool = false
 var host_is_seeker: bool = true
 
@@ -26,6 +28,19 @@ func _ready() -> void:
 func goto_scene(path):
 	_deferred_goto_scene.call_deferred(path)
 
+func display_name(id: int) -> String:
+	var n = MultiplayerController.players.get(id, {}).get("name", "")
+	if n == "" or n == "Name":
+		return "Seeker" if id == 1 else "Player " + str(id)
+	return n
+	
+func count_hiders() -> int:
+	var count := 0
+	for id in MultiplayerController.players:
+		var p = MultiplayerController.players[id]
+		if p.get("role") == "hider" and not p.get("eliminated", false):
+			count += 1
+	return count
 
 func _deferred_goto_scene(path):
 	print(path)
@@ -112,9 +127,33 @@ func stop_round(): # turn off roles and win logic
 func end_round(winning_role: String, tagger_id: int, tagged_id: int) -> void:
 	if !multiplayer.is_server() or !round_active:
 		return
+	print("end_round called, round_active = ", round_active)
+	print_stack()
+	print("players: ", MultiplayerController.players)
 	round_active = false
 	announce_round_over.rpc(winning_role, tagger_id, tagged_id)
-	
+
+func tag_player(tagger_id: int, tagged_id: int) -> void:
+	if !multiplayer.is_server() or !round_active:
+		return
+	var info = MultiplayerController.players.get(tagged_id, {})
+	if info.get("eliminated", false):
+		return
+	info["eliminated"] = true          # server-side, instantly
+	eliminate_player.rpc(tagger_id, tagged_id)    # replicate to clients
+
+	for id in MultiplayerController.players:
+		var p = MultiplayerController.players[id]
+		if p.get("role") == "hider" and not p.get("eliminated", false):
+			return   # at least one hider is still free
+	end_round("seeker", tagger_id, tagged_id)
+
+@rpc("authority", "call_local", "reliable")
+func eliminate_player(tagger_id: int, tagged_id: int) -> void:
+	if MultiplayerController.players.has(tagged_id):
+		MultiplayerController.players[tagged_id]["eliminated"] = true
+	player_tagged.emit(tagger_id, tagged_id, count_hiders())
+
 func _on_player_disconnected(_id) -> void:
 	if !multiplayer.is_server() or !round_active:
 		return
