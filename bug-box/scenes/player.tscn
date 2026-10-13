@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c7bisibikqqxe" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://drhydi04xhywx" path="res://assets/bug.glb" id="2_g2els"]
-[ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="3_qhqgy"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3vyb7"]
 properties/0/path = NodePath(".:peer_id")
@@ -111,9 +110,6 @@ text = "Grav Label"
 
 [node name="bug" parent="." unique_id=1402643095 instance=ExtResource("2_g2els")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.014466524, -0.034721255, 1.2972248)
-
-[node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)
 
 [node name="TagArea" type="Area3D" parent="." unique_id=1018431661]
 unique_name_in_owner = true
