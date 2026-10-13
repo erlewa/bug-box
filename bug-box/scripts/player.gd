@@ -193,7 +193,7 @@ func change_gravity():
 			
 			vel_speed = abs(global_transform.basis.x * SPEED) + global_transform.basis.y * 0 + abs(global_transform.basis.z * SPEED)
 			apply_floor_snap()
-			await get_tree().create_timer(0.5).timeout
+			#await get_tree().create_timer(0.5).timeout
 			ray_cast_3d.enabled = true
 	)
 
