@@ -1,9 +1,18 @@
 [gd_scene format=3 uid="uid://fcqgl02xplay"]
 
 [ext_resource type="Material" uid="uid://beximri83rj8o" path="res://assets/prototype_level.tres" id="1_bw3rj"]
-[ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="2_bw3rj"]
+[ext_resource type="Script" uid="uid://blo8p0vhv084n" path="res://scripts/level.gd" id="1_osc7o"]
+
+[sub_resource type="Curve3D" id="Curve3D_wjk5u"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 5.4987435, 0.09999943, -1.5920963, 0, 0, 0, 0, 0, 0, 10.76624, 0.10000038, -13.8036995, 0, 0, 0, 0, 0, 0, -6.4297314, 0.10000038, -20.028364, 0, 0, 0, 0, 0, 0, -19.000212, 0.10000038, -6.572647, 0, 0, 0, 0, 0, 0, -18.188282, 0.09999943, 14.330629, 0, 0, 0, 0, 0, 0, -7.248194, 0.099999905, -0.3764887),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
 
 [node name="Level0" type="Node3D" unique_id=1479764245]
+script = ExtResource("1_osc7o")
 
 [node name="Level" type="Node3D" parent="." unique_id=1890810370]
 
@@ -129,14 +138,6 @@ use_collision = true
 size = Vector3(1.5, 28.884155, 1.5)
 material = ExtResource("1_bw3rj")
 
-[node name="Node3D" type="Node3D" parent="." unique_id=1519593509]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.6, 0)
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Node3D" unique_id=1830257390]
-_spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
-spawn_path = NodePath(".")
-script = ExtResource("2_bw3rj")
-
 [node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=1591587182]
 transform = Transform3D(-0.245751, -0.7073117, 0.6628097, -0.9398383, 0.006472067, -0.3415586, 0.23729853, -0.7068722, -0.6663491, 21.56455, 2.4672394, -19.929585)
 light_energy = 32.0
@@ -154,3 +155,7 @@ transform = Transform3D(-0.37245697, 0.7391973, 0.5611267, -0.55237395, -0.66244
 light_energy = 32.0
 spot_range = 4096.0
 spot_angle = 180.0
+
+[node name="PlayerSpawnPath" type="Path3D" parent="." unique_id=1476590357]
+unique_name_in_owner = true
+curve = SubResource("Curve3D_wjk5u")
