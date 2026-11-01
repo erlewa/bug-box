@@ -5,9 +5,19 @@ signal game_start
 
 var current_scene: Node
 
+var multiplayer_spawner: MultiplayerSpawner
+const PlayerSpawner = preload("uid://cx3pv13o45f7c")
+
 func _ready() -> void:
 	var root = get_tree().root
 	current_scene = root.get_child(-1)
+	
+	# Setup Player Spawner
+	multiplayer_spawner = MultiplayerSpawner.new()
+	multiplayer_spawner.add_spawnable_scene("res://scenes/player.tscn")
+	multiplayer_spawner.set_script(PlayerSpawner)
+	add_child(multiplayer_spawner, true)
+	multiplayer_spawner.spawn_path = multiplayer_spawner.get_path()
 	
 	current_scene.load_level.connect(goto_scene)
 	print(str(current_scene.get_signal_connection_list("load_level")))
