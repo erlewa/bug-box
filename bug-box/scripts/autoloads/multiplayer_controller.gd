@@ -84,6 +84,7 @@ func player_ready(ready_up: bool):
 		players_ready += (1 if ready_up else -1)
 		print("Players Ready After: ", str(players_ready))
 		if players.size() > 1 and players_ready == players.size():
+			print("\n***********************\n    STARTING GAME\n")
 			GameController.transition_to_level.rpc()
 
 

@@ -21,6 +21,6 @@ func spawn_player(peer_id, player_info):
 func spawn_players():
 	if !(multiplayer.is_server()):
 		return
-
+	
 	for id in MultiplayerController.players:
 		spawn_player(id, MultiplayerController.players[id])
