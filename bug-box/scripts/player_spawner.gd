@@ -24,6 +24,8 @@ func spawn_player(peer_id, player_info):
 	var player = PLAYER.instantiate()
 	player.peer_id = peer_id
 	player.position = _spawn_position(peer_id, player.position)
+	player.role = player_info.get("role", "hider")
+	player.bugindex = player_info["bugindex"]
 	add_child(player, true)
 
 func _on_peer_level_loaded(id) -> void:

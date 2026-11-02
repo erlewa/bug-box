@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://bgkdfma75lhwj"]
 
 [ext_resource type="Script" uid="uid://cknr7qib7ur4x" path="res://scripts/main_menu.gd" id="1_bqqt6"]
+[ext_resource type="Texture2D" uid="uid://c4i357u2bcje4" path="res://assets/bugIcon.png" id="2_721jg"]
+[ext_resource type="Texture2D" uid="uid://cntkbe7qpvl8q" path="res://assets/ladybugIcon.png" id="3_geflf"]
 
 [node name="MainMenu" type="Control" unique_id=1420500914]
 layout_mode = 3
@@ -44,7 +46,24 @@ offset_right = 666.0
 offset_bottom = 433.0
 text = "Host"
 
+[node name="BugSelector" type="OptionButton" parent="." unique_id=1686270332]
+layout_mode = 0
+offset_left = 676.0
+offset_top = 469.0
+offset_right = 945.0
+offset_bottom = 545.0
+selected = 0
+fit_to_longest_item = false
+item_count = 2
+popup/item_0/text = "Bug"
+popup/item_0/icon = ExtResource("2_721jg")
+popup/item_0/id = 0
+popup/item_1/text = "Ladybug"
+popup/item_1/icon = ExtResource("3_geflf")
+popup/item_1/id = 1
+
 [connection signal="pressed" from="Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="Join" to="Join" method="_on_pressed"]
 [connection signal="pressed" from="Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="Host" to="Host" method="_on_pressed"]
+[connection signal="item_selected" from="BugSelector" to="." method="_on_bug_selected"]
