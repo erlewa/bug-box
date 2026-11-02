@@ -32,6 +32,9 @@ properties/7/replication_mode = 1
 properties/8/path = NodePath(".:role")
 properties/8/spawn = true
 properties/8/replication_mode = 1
+properties/9/path = NodePath(".:bugindex")
+properties/9/spawn = true
+properties/9/replication_mode = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_021oi"]
 radius = 0.34716797
@@ -106,8 +109,11 @@ offset_right = 83.0
 grow_vertical = 0
 text = "Grav Label"
 
-[node name="bug" parent="." unique_id=1402643095 instance=ExtResource("2_g2els")]
+[node name="Bug" parent="." unique_id=1402643095 instance=ExtResource("2_g2els")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.014466524, -0.034721255, 1.2972248)
+visible = false
 
 [node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)
+
+[editable path="Bug"]
