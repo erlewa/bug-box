@@ -13,7 +13,7 @@ const ladybug = preload("res://assets/ladybug.glb")
 @onready var player_label: Label = %PlayerLabel
 @onready var debug: Control = %Debug
 @onready var gravity_label: Label = %GravityLabel
-@onready var server_synchronizer: MultiplayerSynchronizer = $ServerSynchronizer
+@onready var server_synchronizer: MultiplayerSynchronizer = %ServerSynchronizer
 var hud: Control
 
 var _mouse_input : bool = false
@@ -49,15 +49,17 @@ func _ready() -> void:
 	+ "\n**********\n")
 	
 	# Assign bug
-	var bug_model = plainbug.instantiate()
-	if bugindex == 0:
-		bug_model.translate(Vector3(0, 0, 1))
-	elif bugindex == 1:
-		bug_model = ladybug.instantiate()
-		bug_model.scale = Vector3(0.3, 0.3, 0.3)
-		bug_model.translate(Vector3(0, 0, 2.5))
+	var bug_model
+	match bugindex:
+		1:
+			bug_model = ladybug.instantiate()
+			bug_model.scale = Vector3(0.3, 0.3, 0.3)
+			bug_model.translate(Vector3(0, 0, 2.5))
+		_:
+			bug_model = plainbug.instantiate()
+			bug_model.translate(Vector3(0, 0, 1))
+	
 	add_child(bug_model)
-	#server_synchronizer.replication_config.add_property(bug_model.get_path())
 	
 	local = (peer_id == multiplayer.get_unique_id())
 	if (local):
