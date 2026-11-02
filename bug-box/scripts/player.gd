@@ -3,6 +3,9 @@ class_name Player
 
 const HUD = preload("uid://dqg3ffnjlfjwv")
 
+const plainbug = preload("res://assets/bug.glb")
+const ladybug = preload("res://assets/ladybug.glb")
+
 # https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
 @onready var ray_cast_3d: RayCast3D = %RayCast3D
 @onready var basis_label: Label = %BasisLabel
@@ -10,6 +13,7 @@ const HUD = preload("uid://dqg3ffnjlfjwv")
 @onready var player_label: Label = %PlayerLabel
 @onready var debug: Control = %Debug
 @onready var gravity_label: Label = %GravityLabel
+@onready var server_synchronizer: MultiplayerSynchronizer = %ServerSynchronizer
 var hud: Control
 
 var _mouse_input : bool = false
@@ -30,6 +34,7 @@ const JUMP_VELOCITY = 4.5
 
 @export var peer_id: int = 1 # The peer that controls this player
 @export var role: String = "hider"
+@export var bugindex: int = 0
 var local: bool = true # If this player belongs to the local peer
 @export var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -40,7 +45,22 @@ func _ready() -> void:
 	print("IN _ready():\n\tPlayer peer_id: " + str(peer_id) 
 	+ "\n\tMultiplayer Unique id: " + str(multiplayer.get_unique_id()) 
 	+ "\n\tLocal: " + str(local)
+	+ "\n\tBugIndex: " + str(bugindex)
 	+ "\n**********\n")
+	
+	# Assign bug
+	var bug_model
+	match bugindex:
+		1:
+			bug_model = ladybug.instantiate()
+			bug_model.scale = Vector3(0.3, 0.3, 0.3)
+			bug_model.translate(Vector3(0, 0, 2.5))
+		_:
+			bug_model = plainbug.instantiate()
+			bug_model.translate(Vector3(0, 0, 1))
+	
+	add_child(bug_model)
+	
 	local = (peer_id == multiplayer.get_unique_id())
 	if (local):
 		# Activate the camera if local

@@ -19,7 +19,7 @@ var players = {}
 # before the connection is made. It will be passed to every other peer.
 # For example, the value of "name" can be set to something the player
 # entered in a UI scene.
-var player_info = {"name": "Name", "role": "hider"}
+var player_info = {"name": "Name", "role": "hider", "bugindex": 0}
 
 var players_loaded = 0
 var players_ready = 0
@@ -33,7 +33,9 @@ func _ready():
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
-func join_game(address = ""):
+func join_game(address = "", bugindex = 0):
+	player_info["bugindex"] = bugindex
+	print("JOIN GAME:", player_info)
 	if address.is_empty():
 		address = DEFAULT_SERVER_IP
 	var peer = ENetMultiplayerPeer.new()
@@ -43,7 +45,7 @@ func join_game(address = ""):
 	multiplayer.multiplayer_peer = peer
 
 
-func create_game():
+func create_game(bugindex = 0):
 	print("Creating Game")
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(PORT, MAX_CONNECTIONS)
@@ -51,6 +53,7 @@ func create_game():
 		return error
 	multiplayer.multiplayer_peer = peer
 
+	player_info["bugindex"] = bugindex
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 
@@ -91,6 +94,7 @@ func player_ready(ready_up: bool):
 # When a peer connects, send them my player info.
 # This allows transfer of all desired data for each player, not only the unique ID.
 func _on_player_connected(id):
+	print("ON PLAYER CONNECTED: ", id, player_info)
 	_register_player.rpc_id(id, player_info)
 
 @rpc("any_peer", "reliable")
