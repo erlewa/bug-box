@@ -34,6 +34,7 @@ func _on_peer_level_loaded(id) -> void:
 func spawn_players():
 	if !(multiplayer.is_server()):
 		return
+
 	for id in MultiplayerController.players:
 		spawn_player(id, MultiplayerController.players[id])
 		

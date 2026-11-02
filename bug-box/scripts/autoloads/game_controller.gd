@@ -13,9 +13,19 @@ var host_is_seeker: bool = true
 
 var current_scene: Node
 
+var multiplayer_spawner: MultiplayerSpawner
+const PlayerSpawner = preload("uid://cx3pv13o45f7c")
+
 func _ready() -> void:
 	var root = get_tree().root
 	current_scene = root.get_child(-1)
+	
+	# Setup Player Spawner
+	multiplayer_spawner = MultiplayerSpawner.new()
+	multiplayer_spawner.add_spawnable_scene("res://scenes/player.tscn")
+	multiplayer_spawner.set_script(PlayerSpawner)
+	add_child(multiplayer_spawner, true)
+	multiplayer_spawner.spawn_path = multiplayer_spawner.get_path()
 	
 	current_scene.load_level.connect(goto_scene)
 	print(str(current_scene.get_signal_connection_list("load_level")))
@@ -45,12 +55,15 @@ func count_hiders() -> int:
 func _deferred_goto_scene(path):
 	print(path)
 	current_scene.free()
-	var s = ResourceLoader.load(path)
-	current_scene = s.instantiate()
+	var new_scene = ResourceLoader.load(path)
+	current_scene = new_scene.instantiate()
 	get_tree().root.add_child(current_scene)
 
 	# Make it compatible with the SceneTree.change_scene_to_file() API.
 	get_tree().current_scene = current_scene
+	print("Player " + str(multiplayer.get_unique_id()) + " calling player_loaded()")
+	if Globals.game_starting:
+		MultiplayerController.rpc("player_loaded")
 
 
 #####################
@@ -107,6 +120,11 @@ func start_game():
 	round_started.emit()
 	print("GAME STARTING NOW!")
 	# TO-DO: Add game starting logic, ie. give hiders some time to run away do something with the seekers
+  
+  # Assign each player a random spawn location
+	for child in multiplayer_spawner.get_children():
+		if child is Player and current_scene is Level:
+			child.position = current_scene.get_spawn_location()
 	
 @rpc("authority", "call_local", "reliable")
 func announce_round_over(winning_role: String, tagger_id: int, tagged_id: int) -> void:

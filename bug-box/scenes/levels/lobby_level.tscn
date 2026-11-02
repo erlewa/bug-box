@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://b585s71sxu2f6" path="res://assets/mcgrass.png" id="1_013xv"]
 [ext_resource type="Texture2D" uid="uid://bkxx5jftt6qbf" path="res://assets/mccobble.png" id="2_mfas6"]
 [ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="3_a5umu"]
-[ext_resource type="Script" uid="uid://cx3pv13o45f7c" path="res://scripts/player_spawner.gd" id="4_xtmwt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5nv5w"]
 albedo_texture = ExtResource("1_013xv")
@@ -135,11 +134,6 @@ spot_angle = 180.0
 [node name="SpotLight3D" type="DirectionalLight3D" parent="." unique_id=1823111128]
 transform = Transform3D(0.85891366, 0.0010960302, -0.5121193, 0.5121204, -0.0018382304, 0.85891175, 0, -0.9999978, -0.0021401807, -2.8354492, 30.507732, -1.6295834)
 visible = false
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=2084917811]
-_spawnable_scenes = PackedStringArray("uid://cad3tk841gia0")
-spawn_path = NodePath(".")
-script = ExtResource("4_xtmwt")
 
 [node name="AxisDebug" parent="." unique_id=342122236 instance=ExtResource("3_a5umu")]
 transform = Transform3D(7.16, 0, 0, 0, 7.16, 0, 0, 0, 7.16, 0, 5.987464, 0)
