@@ -26,6 +26,7 @@ func spawn_player(peer_id, player_info):
 	player.position = _spawn_position(peer_id, player.position)
 	player.role = player_info.get("role", "hider")
 	player.bugindex = player_info["bugindex"]
+	player.username = player_info["name"] if !player_info["name"].strip_edges().is_empty() else "Player"+str(peer_id)
 	add_child(player, true)
 
 func _on_peer_level_loaded(id) -> void:

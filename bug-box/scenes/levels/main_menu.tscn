@@ -15,43 +15,43 @@ script = ExtResource("1_bqqt6")
 
 [node name="Label" type="Label" parent="." unique_id=822566552]
 layout_mode = 0
-offset_left = 704.0
-offset_top = 299.0
-offset_right = 764.0
-offset_bottom = 322.0
+offset_left = 642.0
+offset_top = 339.0
+offset_right = 702.0
+offset_bottom = 362.0
 text = "Host IP:"
 metadata/_edit_use_anchors_ = true
 
 [node name="IPInput" type="TextEdit" parent="." unique_id=1340952321]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 694.0
-offset_top = 326.0
-offset_right = 920.0
-offset_bottom = 373.0
+offset_left = 632.0
+offset_top = 366.0
+offset_right = 858.0
+offset_bottom = 413.0
 
 [node name="Join" type="Button" parent="." unique_id=218367565]
 layout_mode = 0
-offset_left = 442.0
-offset_top = 326.0
-offset_right = 666.0
-offset_bottom = 372.0
+offset_left = 380.0
+offset_top = 366.0
+offset_right = 604.0
+offset_bottom = 412.0
 text = "Join"
 
 [node name="Host" type="Button" parent="." unique_id=1468057238]
 layout_mode = 0
-offset_left = 442.0
-offset_top = 387.0
-offset_right = 666.0
-offset_bottom = 433.0
+offset_left = 380.0
+offset_top = 427.0
+offset_right = 604.0
+offset_bottom = 473.0
 text = "Host"
 
 [node name="BugSelector" type="OptionButton" parent="." unique_id=1686270332]
 layout_mode = 0
-offset_left = 676.0
-offset_top = 469.0
-offset_right = 945.0
-offset_bottom = 545.0
+offset_left = 665.0
+offset_top = 177.0
+offset_right = 934.0
+offset_bottom = 253.0
 selected = 0
 fit_to_longest_item = false
 item_count = 2
@@ -61,6 +61,22 @@ popup/item_0/id = 0
 popup/item_1/text = "Ladybug"
 popup/item_1/icon = ExtResource("3_geflf")
 popup/item_1/id = 1
+
+[node name="NameInput" type="TextEdit" parent="." unique_id=264436320]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 304.0
+offset_top = 210.0
+offset_right = 557.0
+offset_bottom = 251.0
+
+[node name="Label2" type="Label" parent="." unique_id=1107646850]
+layout_mode = 0
+offset_left = 312.0
+offset_top = 178.0
+offset_right = 436.0
+offset_bottom = 204.0
+text = "Username:"
 
 [connection signal="pressed" from="Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="Join" to="Join" method="_on_pressed"]
