@@ -31,12 +31,9 @@ func _ready() -> void:
 	print(str(current_scene.get_signal_connection_list("load_level")))
 	MultiplayerController.player_disconnected.connect(_on_player_disconnected)
 
-##########################
-#  Change Current Level  #
-##########################
-# See https://docs.godotengine.org/en/stable/tutorials/scripting/singletons_autoload.html
-func goto_scene(path):
-	_deferred_goto_scene.call_deferred(path)
+#############
+#  Helpers  #
+#############
 
 func display_name(id: int) -> String:
 	var n = MultiplayerController.players.get(id, {}).get("name", "")
@@ -51,6 +48,13 @@ func count_hiders() -> int:
 		if p.get("role") == "hider" and not p.get("eliminated", false):
 			count += 1
 	return count
+
+##########################
+#  Change Current Level  #
+##########################
+# See https://docs.godotengine.org/en/stable/tutorials/scripting/singletons_autoload.html
+func goto_scene(path):
+	_deferred_goto_scene.call_deferred(path)
 
 func _deferred_goto_scene(path):
 	print(path)
@@ -114,18 +118,21 @@ func transition_to_level():
 # Called when all players have succesfully loaded into the level
 @rpc("authority", "call_local", "reliable")
 func start_game():
+ 	# Assign each player a random spawn location
+	for child in multiplayer_spawner.get_children():
+		if child is Player and current_scene is Level:
+			child.position = current_scene.get_spawn_location()
+			
 	Globals.game_starting = false
 	round_active = true
 	emit_signal("game_start")
 	round_started.emit()
 	print("GAME STARTING NOW!")
-	# TO-DO: Add game starting logic, ie. give hiders some time to run away do something with the seekers
-  
-  # Assign each player a random spawn location
-	for child in multiplayer_spawner.get_children():
-		if child is Player and current_scene is Level:
-			child.position = current_scene.get_spawn_location()
-	
+ 
+################
+#  Game Logic  #
+################
+
 @rpc("authority", "call_local", "reliable")
 func announce_round_over(winning_role: String, tagger_id: int, tagged_id: int) -> void:
 	#something graphical here using player names
@@ -154,6 +161,7 @@ func end_round(winning_role: String, tagger_id: int, tagged_id: int) -> void:
 func tag_player(tagger_id: int, tagged_id: int) -> void:
 	if !multiplayer.is_server() or !round_active:
 		return
+	print("tag_player was called")
 	var info = MultiplayerController.players.get(tagged_id, {})
 	if info.get("eliminated", false):
 		return

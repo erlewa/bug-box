@@ -121,3 +121,5 @@ unique_name_in_owner = true
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TagArea" unique_id=203214567]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
 shape = SubResource("SphereShape3D_tdnfp")
+
+[connection signal="body_entered" from="TagArea" to="." method="_on_tag_area_body_entered"]
