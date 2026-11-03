@@ -14,6 +14,7 @@ const ladybug = preload("res://assets/ladybug.glb")
 @onready var gravity_label: Label = %GravityLabel
 @onready var tag_area: Area3D = %TagArea
 @onready var server_synchronizer: MultiplayerSynchronizer = %ServerSynchronizer
+@onready var username_tag: Label3D = %Username
 var frozen: bool = false # set when round ends
 var hud: Control
 
@@ -45,6 +46,7 @@ var role: String:
 @export var bugindex: int = 0
 var bug_model: Node
 @export var animator: AnimationPlayer
+@export var username: String
 var local: bool = true # If this player belongs to the local peer
 @export var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -62,8 +64,8 @@ func _ready() -> void:
 	match bugindex:
 		1:
 			bug_model = ladybug.instantiate()
-			bug_model.scale = Vector3(0.3, 0.3, 0.3)
-			bug_model.translate(Vector3(0, 0, 2.5))
+			bug_model.scale = Vector3(0.3, 0.2, 0.3)
+			bug_model.translate(Vector3(0, 0, 3))
 			animator = bug_model.get_children().filter(func(x): return x is AnimationPlayer)[0]
 		_:
 			bug_model = plainbug.instantiate()
@@ -84,6 +86,9 @@ func _ready() -> void:
 		Globals.ready_up.connect(_on_hud_ready_up)
 		
 		MultiplayerController.player_loaded.rpc_id(1)
+	else:
+		username_tag.text = username
+		
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	if !multiplayer.is_server():

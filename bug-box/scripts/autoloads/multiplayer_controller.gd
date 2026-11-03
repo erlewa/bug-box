@@ -37,9 +37,9 @@ func _ready():
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
-func join_game(address = "", bugindex = 0):
+func join_game(address = "", name = "", bugindex = 0):
 	player_info["bugindex"] = bugindex
-	print("JOIN GAME:", player_info)
+	player_info["name"] = name
 	if address.is_empty():
 		address = DEFAULT_SERVER_IP
 	var peer = ENetMultiplayerPeer.new()
@@ -49,7 +49,7 @@ func join_game(address = "", bugindex = 0):
 	multiplayer.multiplayer_peer = peer
 
 
-func create_game(bugindex = 0):
+func create_game(name = "", bugindex = 0):
 	print("Creating Game")
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(PORT, MAX_CONNECTIONS)
@@ -58,6 +58,7 @@ func create_game(bugindex = 0):
 	multiplayer.multiplayer_peer = peer
 
 	player_info["bugindex"] = bugindex
+	player_info["name"] = name
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 
