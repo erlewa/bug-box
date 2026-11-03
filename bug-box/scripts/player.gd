@@ -42,8 +42,7 @@ var role: String:
 	get:
 		return MultiplayerController.players.get(peer_id, {}).get("role", "none")
 		
-@export var buginde
-x: int = 0
+@export var bugindex: int = 0
 var local: bool = true # If this player belongs to the local peer
 @export var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
