@@ -8,7 +8,7 @@ signal round_started
 signal player_tagged(tagger_id: int, tagged_id: int, hiders_left: int)
 
 var round_active: bool = false
-var host_is_seeker: bool = true
+var host_is_seeker: bool = false
 
 
 var current_scene: Node
