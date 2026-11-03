@@ -10,3 +10,11 @@ func get_spawn_location():
 	var curve_pos = randf() * length
 	var local_pos = curve.sample_baked(curve_pos)
 	return player_spawn_path.to_global(local_pos)
+
+
+func _on_deathplane_body_exited(body: Node3D) -> void:
+	if body is not Player:
+		return
+	
+	# Reset player location inside the playable area
+	body.position = get_spawn_location()
