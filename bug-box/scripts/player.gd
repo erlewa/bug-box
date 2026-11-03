@@ -115,16 +115,7 @@ func _process(delta: float) -> void:
 		"\nRoles: " + str(MultiplayerController.players)
 	)
 	
-var _dbg_t := 0.0
 func _physics_process(delta: float) -> void:
-	if multiplayer.is_server():
-		_check_tags()
-		_dbg_t += delta
-		if _dbg_t > 1.0:
-			_dbg_t = 0.0
-			#print("[", name, "] round_active=", GameController.round_active,
-				#" role=", role, " mask=", tag_area.collision_mask,
-				#" overlaps=", tag_area.get_overlapping_bodies())
 	if !(local) or frozen:
 		return
 	var input_dir := Input.get_vector("left", "right", "up", "down")
@@ -134,13 +125,6 @@ func _physics_process(delta: float) -> void:
 
 	if ray_cast_3d.is_colliding() and not (ray_cast_3d.get_collider() is Player):
 		change_gravity.rpc_id(1)
-
-func _check_tags() -> void:
-	if !GameController.round_active or role != "seeker":
-		return
-	for body in tag_area.get_overlapping_bodies():
-		if body is Player and body != self and body.role == "hider" and not body.eliminated:
-			GameController.tag_player(peer_id, body.peer_id)
 
 func _input(event: InputEvent) -> void:
 	if !(local):
@@ -188,10 +172,6 @@ func change_gravity():
 	var norm = ray_cast_3d.get_collision_normal()
 	ray_cast_3d.enabled = false
 	
-	velocity = Vector3(0.0, 0.0, 0.0)
-	
-	ray_cast_3d.enabled = false
-	
 	#var surface_forward = global_transform.basis.z.cross(norm).normalized() # Always want + so player orientation doesnt effect rotation axis
 	#var rot_axis = surface_forward.cross(norm).normalized()
 	
@@ -228,7 +208,6 @@ func change_gravity():
 			
 			vel_speed = abs(global_transform.basis.x * SPEED) + global_transform.basis.y * 0 + abs(global_transform.basis.z * SPEED)
 			apply_floor_snap()
-			await get_tree().create_timer(0.5).timeout
 			ray_cast_3d.enabled = true
 	)
 
@@ -306,17 +285,13 @@ func _on_hud_ready_up() -> void:
 	MultiplayerController.player_ready.rpc_id(1, ready_up)
 	
 func _on_tag_area_body_entered(body: Node3D) -> void:
-	if !GameController.round_active:
+	if !multiplayer.is_server() or !GameController.round_active or role != "seeker":
 		return
-	if body == self or not (body is Player):
-		return
-	#only handle from seeker's side so that it doesnt fire twice
-	if role != "seeker" or body.role != "hider":
-		return
-	#seeker touched hider -> seeker wins
-	GameController.end_round("seeker", peer_id, body.peer_id)
+	
+	if body is Player and body != self and body.role == "hider" and not body.eliminated:
+		GameController.tag_player(peer_id, body.peer_id)
 
-func _on_round_over(winning_role: String, tagger_id: int, _tagged_id: int) -> void:
+func _on_round_over(winning_role: String) -> void:
 	frozen = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if local and hud:
