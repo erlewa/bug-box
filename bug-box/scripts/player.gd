@@ -43,6 +43,8 @@ var role: String:
 		return MultiplayerController.players.get(peer_id, {}).get("role", "none")
 		
 @export var bugindex: int = 0
+var bug_model: Node
+@export var animator: AnimationPlayer
 var local: bool = true # If this player belongs to the local peer
 @export var gravity_dir: Vector3 = ProjectSettings.get_setting("physics/3d/default_gravity_vector")
 var gravity_mag = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -57,12 +59,12 @@ func _ready() -> void:
 	+ "\n**********\n")
 	
 	# Assign bug
-	var bug_model
 	match bugindex:
 		1:
 			bug_model = ladybug.instantiate()
 			bug_model.scale = Vector3(0.3, 0.3, 0.3)
 			bug_model.translate(Vector3(0, 0, 2.5))
+			animator = bug_model.get_children().filter(func(x): return x is AnimationPlayer)[0]
 		_:
 			bug_model = plainbug.instantiate()
 			bug_model.translate(Vector3(0, 0, 1))
@@ -122,6 +124,7 @@ func _physics_process(delta: float) -> void:
 		return
 	var input_dir := Input.get_vector("left", "right", "up", "down")
 	var jump = Input.is_action_just_pressed("jump")
+	
 	process_physics.rpc_id(1, delta, input_dir, jump)
 
 	if ray_cast_3d.is_colliding() and not (ray_cast_3d.get_collider() is Player):
@@ -152,6 +155,13 @@ func _unhandled_input(event):
 		var ti = -event.relative.y * MOUSE_SENSITIVITY
 		update_camera_input.rpc_id(1, ri, ti)
 		
+
+@rpc("authority", "call_local", "reliable")
+func sync_animation(input_dir):
+	if input_dir.length() != 0:
+		animator.play("ArmatureAction")
+	else:
+		animator.stop()
 
 @rpc("any_peer", "call_local", "reliable")
 func update_camera_input(rotation_input, tilt_input):
@@ -224,6 +234,9 @@ func process_physics(delta, input_dir, jump):
 		return
 	if peer_id != multiplayer.get_remote_sender_id():
 		return
+	
+	if animator:
+		sync_animation.rpc(input_dir)
 	
 	_update_camera(delta)
 	
