@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://13pjbvkins6l"]
 
 [ext_resource type="Texture2D" uid="uid://b585s71sxu2f6" path="res://assets/mcgrass.png" id="1_013xv"]
+[ext_resource type="Script" uid="uid://blo8p0vhv084n" path="res://scripts/level.gd" id="1_mfas6"]
 [ext_resource type="Texture2D" uid="uid://bkxx5jftt6qbf" path="res://assets/mccobble.png" id="2_mfas6"]
 [ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="3_a5umu"]
 
@@ -37,7 +38,19 @@ size = Vector3(1, 1.0708008, 1)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_mfas6"]
 data = PackedVector3Array(-0.5, 0.5354, 0.5, 0.5, 0.5354, 0.5, -0.5, -0.5354, 0.5, 0.5, 0.5354, 0.5, 0.5, -0.5354, 0.5, -0.5, -0.5354, 0.5, 0.5, 0.5354, -0.5, -0.5, 0.5354, -0.5, 0.5, -0.5354, -0.5, -0.5, 0.5354, -0.5, -0.5, -0.5354, -0.5, 0.5, -0.5354, -0.5, 0.5, 0.5354, 0.5, 0.5, 0.5354, -0.5, 0.5, -0.5354, 0.5, 0.5, 0.5354, -0.5, 0.5, -0.5354, -0.5, 0.5, -0.5354, 0.5, -0.5, 0.5354, -0.5, -0.5, 0.5354, 0.5, -0.5, -0.5354, -0.5, -0.5, 0.5354, 0.5, -0.5, -0.5354, 0.5, -0.5, -0.5354, -0.5, 0.5, 0.5354, 0.5, -0.5, 0.5354, 0.5, 0.5, 0.5354, -0.5, -0.5, 0.5354, 0.5, -0.5, 0.5354, -0.5, 0.5, 0.5354, -0.5, -0.5, -0.5354, 0.5, 0.5, -0.5354, 0.5, -0.5, -0.5354, -0.5, 0.5, -0.5354, 0.5, 0.5, -0.5354, -0.5, -0.5, -0.5354, -0.5)
 
+[sub_resource type="Curve3D" id="Curve3D_013xv"]
+closed = true
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 12.061355, -0.7795744, 3.5242872, 0, 0, 0, 0, 0, 0, 12.024701, -0.7795744, -13.608007, 0, 0, 0, 0, 0, 0, -11.278408, -0.7795744, -12.81719, 0, 0, 0, 0, 0, 0, -11.8291855, -0.7795744, 4.1922493),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_013xv"]
+size = Vector3(42.314766, 40.016792, 40.724487)
+
 [node name="LobbyLevel" type="Node3D" unique_id=1937868015]
+script = ExtResource("1_mfas6")
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1262491241]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
@@ -149,3 +162,16 @@ mesh = SubResource("BoxMesh_wlrn8")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ledge" unique_id=1939398505]
 transform = Transform3D(34.55, 0, 0, 0, 34.55, 0, 0, 0, 34.55, -0.8864269, -16.919846, 16.196817)
 shape = SubResource("ConcavePolygonShape3D_mfas6")
+
+[node name="PlayerSpawnPath" type="Path3D" parent="." unique_id=1875885570]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.435, 2, 0)
+curve = SubResource("Curve3D_013xv")
+
+[node name="Deathplane" type="Area3D" parent="." unique_id=509588981]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Deathplane" unique_id=2030471898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04957199, 14.417721, 0.85357666)
+shape = SubResource("BoxShape3D_013xv")
+
+[connection signal="body_exited" from="Deathplane" to="." method="_on_deathplane_body_exited"]
