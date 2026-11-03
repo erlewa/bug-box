@@ -11,6 +11,9 @@ _data = {
 }
 point_count = 6
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_towhx"]
+size = Vector3(55.600002, 32.600002, 54.5)
+
 [node name="Level0" type="Node3D" unique_id=1479764245]
 script = ExtResource("1_osc7o")
 
@@ -29,9 +32,9 @@ size = Vector3(48.9, 0.2, 48.4)
 material = ExtResource("1_bw3rj")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="Level" unique_id=2004525103]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5000019, 14.087316, -23.18137)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10000229, 14.087316, -23.18137)
 use_collision = true
-size = Vector3(49.7, 28.4, 1)
+size = Vector3(48.9, 28.4, 1)
 material = ExtResource("1_bw3rj")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="Level" unique_id=968736088]
@@ -41,9 +44,9 @@ size = Vector3(48.9, 28.4, 1)
 material = ExtResource("1_bw3rj")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="Level" unique_id=2033318907]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.25011, 14.100001, 0.10000038)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.25011, 14.100001, 0.6000004)
 use_collision = true
-size = Vector3(0.5, 28.4, 47.4)
+size = Vector3(0.5, 28.4, 48.4)
 material = ExtResource("1_bw3rj")
 
 [node name="CSGBox3D10" type="CSGBox3D" parent="Level" unique_id=1332956736]
@@ -160,3 +163,11 @@ spot_angle = 180.0
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.32, 0)
 curve = SubResource("Curve3D_wjk5u")
+
+[node name="Deathplane" type="Area3D" parent="." unique_id=1795923035]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Deathplane" unique_id=1321677637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10000038, 13.599998, 0.6500025)
+shape = SubResource("BoxShape3D_towhx")
+
+[connection signal="body_exited" from="Deathplane" to="." method="_on_deathplane_body_exited"]
