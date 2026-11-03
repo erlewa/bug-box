@@ -203,7 +203,6 @@ func change_gravity():
 			
 			vel_speed = abs(global_transform.basis.x * SPEED) + global_transform.basis.y * 0 + abs(global_transform.basis.z * SPEED)
 			apply_floor_snap()
-			await get_tree().create_timer(0.5).timeout
 			ray_cast_3d.enabled = true
 	)
 
@@ -287,7 +286,7 @@ func _on_tag_area_body_entered(body: Node3D) -> void:
 	if body is Player and body != self and body.role == "hider" and not body.eliminated:
 		GameController.tag_player(peer_id, body.peer_id)
 
-func _on_round_over(winning_role: String, tagger_id: int, _tagged_id: int) -> void:
+func _on_round_over(winning_role: String) -> void:
 	frozen = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if local and hud:

@@ -2,15 +2,16 @@
 extends Node
 
 signal game_start
-
-signal round_over(winning_role: String, tagger_id: int, tagged_id: int)
+signal round_over(winning_role: String)
 signal round_started
 signal player_tagged(tagger_id: int, tagged_id: int, hiders_left: int)
 
 var round_active: bool = false
 var host_is_seeker: bool = false
 
+var hider_win_timer: Timer
 
+# Currently active game level
 var current_scene: Node
 
 var multiplayer_spawner: MultiplayerSpawner
@@ -26,6 +27,16 @@ func _ready() -> void:
 	multiplayer_spawner.set_script(PlayerSpawner)
 	add_child(multiplayer_spawner, true)
 	multiplayer_spawner.spawn_path = multiplayer_spawner.get_path()
+	
+	# Setup Hider Win Timer
+	hider_win_timer = Timer.new()
+	hider_win_timer.wait_time = 120.0
+	hider_win_timer.one_shot = true
+	hider_win_timer.timeout.connect(func(): 
+		print("Starting hider win timer...")
+		end_round("hider")
+	)
+	add_child(hider_win_timer)
 	
 	current_scene.load_level.connect(goto_scene)
 	print(str(current_scene.get_signal_connection_list("load_level")))
@@ -122,24 +133,36 @@ func start_game():
 	for child in multiplayer_spawner.get_children():
 		if child is Player and current_scene is Level:
 			child.position = current_scene.get_spawn_location()
-			
+	
+	# Start timer for hider win condition
+	hider_win_timer.start()
+	
+	# Assign Variables to signal game start
 	Globals.game_starting = false
 	round_active = true
-	emit_signal("game_start")
-	round_started.emit()
+	emit_signal("game_start") # One of these two should go away
+	round_started.emit()      # This being the other of the two
 	print("GAME STARTING NOW!")
  
 ################
 #  Game Logic  #
 ################
 
+func end_round(winning_role: String) -> void:
+	if !multiplayer.is_server() or !round_active:
+		return
+	print("end_round called, round_active = ", round_active)
+	print_stack()
+	print("players: ", MultiplayerController.players)
+	round_active = false
+	announce_round_over.rpc(winning_role)
+	
 @rpc("authority", "call_local", "reliable")
-func announce_round_over(winning_role: String, tagger_id: int, tagged_id: int) -> void:
+func announce_round_over(winning_role: String) -> void:
 	#something graphical here using player names
 	print("ROUND OVER - winner: ", winning_role)
-	print(tagger_id, " tagged ", tagged_id) 
 	round_active = false
-	round_over.emit(winning_role, tagger_id, tagged_id)
+	round_over.emit(winning_role)
 	
 func stop_round(): # turn off roles and win logic
 	if !multiplayer.is_server():
@@ -148,15 +171,6 @@ func stop_round(): # turn off roles and win logic
 	for id in MultiplayerController.players:
 		MultiplayerController.players[id]["role"] = "none"
 	assign_roles_to_players.rpc(MultiplayerController.players)
-
-func end_round(winning_role: String, tagger_id: int, tagged_id: int) -> void:
-	if !multiplayer.is_server() or !round_active:
-		return
-	print("end_round called, round_active = ", round_active)
-	print_stack()
-	print("players: ", MultiplayerController.players)
-	round_active = false
-	announce_round_over.rpc(winning_role, tagger_id, tagged_id)
 
 func tag_player(tagger_id: int, tagged_id: int) -> void:
 	if !multiplayer.is_server() or !round_active:
@@ -172,7 +186,7 @@ func tag_player(tagger_id: int, tagged_id: int) -> void:
 		var p = MultiplayerController.players[id]
 		if p.get("role") == "hider" and not p.get("eliminated", false):
 			return   # at least one hider is still free
-	end_round("seeker", tagger_id, tagged_id)
+	end_round("seeker")
 
 @rpc("authority", "call_local", "reliable")
 func eliminate_player(tagger_id: int, tagged_id: int) -> void:
