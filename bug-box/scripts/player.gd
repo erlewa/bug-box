@@ -2,7 +2,7 @@ extends CharacterBody3D
 class_name Player
 
 const HUD = preload("uid://dqg3ffnjlfjwv")
-const plainbug = preload("res://assets/bug.glb")
+const plainbug = preload("res://assets/bug2.glb")
 const ladybug = preload("res://assets/ladybug.glb")
 
 # https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
@@ -66,11 +66,11 @@ func _ready() -> void:
 			bug_model = ladybug.instantiate()
 			bug_model.scale = Vector3(0.3, 0.2, 0.3)
 			bug_model.translate(Vector3(0, 0, 3))
-			animator = bug_model.get_children().filter(func(x): return x is AnimationPlayer)[0]
 		_:
 			bug_model = plainbug.instantiate()
 			bug_model.translate(Vector3(0, 0, 1))
 	
+	animator = bug_model.get_children().filter(func(x): return x is AnimationPlayer)[0]
 	add_child(bug_model)
 	
 	local = (peer_id == multiplayer.get_unique_id())
