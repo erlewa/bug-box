@@ -61,7 +61,7 @@ transform = Transform3D(1.9106855e-15, -4.3711385e-08, 0.99999994, -1, -4.371138
 shape = SubResource("CapsuleShape3D_021oi")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1787981846]
-transform = Transform3D(1, 0, 0, 0, 0.9100582, 0.41448048, 0, -0.41448048, 0.9100582, 0, 1.4006497, 2.2464137)
+transform = Transform3D(1, 0, 0, 0, 0.9100582, 0.41448048, 0, -0.41448048, 0.9100582, 0, 2.5564418, 3.793838)
 
 [node name="RayCast3D" type="RayCast3D" parent="." unique_id=2126956000]
 unique_name_in_owner = true
