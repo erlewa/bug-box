@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cknr7qib7ur4x" path="res://scripts/main_menu.gd" id="1_bqqt6"]
 [ext_resource type="Texture2D" uid="uid://c4i357u2bcje4" path="res://assets/bugIcon.png" id="2_721jg"]
 [ext_resource type="Texture2D" uid="uid://cntkbe7qpvl8q" path="res://assets/ladybugIcon.png" id="3_geflf"]
+[ext_resource type="Texture2D" uid="uid://bue87fntcpw8i" path="res://assets/flyicon.png" id="4_geflf"]
 
 [node name="MainMenu" type="Control" unique_id=1420500914]
 layout_mode = 3
@@ -54,13 +55,16 @@ offset_right = 934.0
 offset_bottom = 253.0
 selected = 0
 fit_to_longest_item = false
-item_count = 2
+item_count = 3
 popup/item_0/text = "Bug"
 popup/item_0/icon = ExtResource("2_721jg")
 popup/item_0/id = 0
 popup/item_1/text = "Ladybug"
 popup/item_1/icon = ExtResource("3_geflf")
 popup/item_1/id = 1
+popup/item_2/text = "Fly"
+popup/item_2/icon = ExtResource("4_geflf")
+popup/item_2/id = 2
 
 [node name="NameInput" type="TextEdit" parent="." unique_id=264436320]
 unique_name_in_owner = true
