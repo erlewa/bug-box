@@ -4,6 +4,8 @@ class_name Player
 const HUD = preload("uid://dqg3ffnjlfjwv")
 const plainbug = preload("res://assets/bug2.glb")
 const ladybug = preload("res://assets/ladybug.glb")
+const flybug = preload("res://assets/fly.glb")
+const beebug = preload("res://assets/bee.glb")
 
 # https://ezcha.net/news/5-7-26-multiplayer-in-godot-is-easier-than-you-think
 @onready var ray_cast_3d: RayCast3D = %RayCast3D
@@ -66,6 +68,15 @@ func _ready() -> void:
 			bug_model = ladybug.instantiate()
 			bug_model.scale = Vector3(0.3, 0.2, 0.3)
 			bug_model.translate(Vector3(0, 0, 3))
+		2:
+			bug_model = flybug.instantiate()
+			bug_model.set_rotation_degrees(Vector3(0, 90, 0))
+			bug_model.scale = Vector3(0.6, 0.55, 0.6)
+			bug_model.translate(Vector3(-2.5, 0, 0))
+		3:
+			bug_model = beebug.instantiate()
+			bug_model.scale = Vector3(0.7, 0.6, 0.7)
+			bug_model.translate(Vector3(0, 0, 1))
 		_:
 			bug_model = plainbug.instantiate()
 			bug_model.translate(Vector3(0, 0, 1))
