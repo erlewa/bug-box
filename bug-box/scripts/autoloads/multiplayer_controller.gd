@@ -46,10 +46,6 @@ func _ready():
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
-
-func host_lobby():
-	Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 10)
-	is_host = true
 	
 func _on_lobby_created(result: int, lobby_id: int):
 	if result == Steam.Result.RESULT_OK:
@@ -58,7 +54,7 @@ func _on_lobby_created(result: int, lobby_id: int):
 		peer = SteamMultiplayerPeer.new()
 		peer.server_relay = true
 		
-		var error = peer.create_host()
+		var error = peer.create_host(0)
 		
 		print("HOST CREATE RESULT: ", error)
 
@@ -75,12 +71,10 @@ func _on_lobby_created(result: int, lobby_id: int):
 		print("Host Steam ID: ", Steam.getSteamID())
 		print(players)
 
-func join_lobby(lobby_id : int):
-	is_joining = true
-	Steam.joinLobby(lobby_id)
 
 func _on_lobby_joined(lobby_id: int, permission : int, locked: bool, response: int):
 	if !is_joining:
+		print("this player isn't actually joining rn")
 		return
 	
 	print("\n========== LOBBY JOINED ==========")
@@ -93,20 +87,25 @@ func _on_lobby_joined(lobby_id: int, permission : int, locked: bool, response: i
 		is_joining = false
 		return
 	
-	self.lobby_id = lobby_id
-	peer = SteamMultiplayerPeer.new()
-	peer.server_relay = true
-	var error = peer.create_client(Steam.getLobbyOwner(lobby_id), 0)
-	print("Create client error: ", error)
+	var lobbyOwnerId = Steam.getLobbyOwner(lobby_id)
+	
+	if lobbyOwnerId == Steam.getSteamID():
+		print("ONLOBBYJOINED BUT Lobby owner matches our steam id, silly")
+	else:
+		self.lobby_id = lobby_id
+		peer = SteamMultiplayerPeer.new()
+		peer.server_relay = true
+		var error = peer.create_client(lobbyOwnerId, 0)
+		print("Create client error: ", error)
 
-	if error != OK:
-		print("FAILED TO CREATE CLIENT PEER")
-		is_joining = false
-		return
-	
-	multiplayer.multiplayer_peer = peer
-	
-	print("Done joining lobby")
+		if error != OK:
+			print("FAILED TO CREATE CLIENT PEER")
+			is_joining = false
+			return
+		
+		multiplayer.multiplayer_peer = peer
+		
+		print("Done joining lobby")
 	is_joining = false
 
 
@@ -115,7 +114,8 @@ func join_game(address = "", name = "", bugindex = 0):
 	player_info["bugindex"] = bugindex
 	player_info["name"] = name
 	
-	join_lobby(address.to_int())
+	is_joining = true
+	Steam.joinLobby(address.to_int())
 	
 	#if address.is_empty():
 		#address = DEFAULT_SERVER_IP
@@ -130,7 +130,9 @@ func join_game(address = "", name = "", bugindex = 0):
 func create_game(name = "", bugindex = 0):
 	player_info["bugindex"] = bugindex
 	player_info["name"] = name
-	host_lobby()
+	
+	Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 10)
+	is_host = true
 	#print("Creating Game")
 	#var peer = ENetMultiplayerPeer.new()
 	#var error = peer.create_server(PORT, MAX_CONNECTIONS)
@@ -180,33 +182,18 @@ func player_ready(ready_up: bool):
 # When a peer connects, send them my player info.
 # This allows transfer of all desired data for each player, not only the unique ID.
 func _on_player_connected(id):
-	print("ON PLAYER CONNECTED: ", id, player_info)
-	
-	var peer_id = multiplayer.get_unique_id()
-	players[peer_id] = player_info.duplicate()
-	player_connected.emit(peer_id, players[peer_id])
-	
+	print("ON PLAYER CONNECTED: ", id, player_info, multiplayer.get_unique_id())
+	print()
 	_register_player.rpc_id(id, player_info)
-	print(players)
-	for existing_id in players:
-		print("registerplayeronclients: ", existing_id)
-		_register_player_on_clients.rpc_id(id, existing_id, players[existing_id])
+
 
 @rpc("any_peer", "call_local", "reliable")
 func _register_player(new_player_info):
-	if !multiplayer.is_server():
-		return
 	print("register player ", new_player_info)
 	var new_player_id = multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_info
 	player_connected.emit(new_player_id, new_player_info)
-	
-	_register_player_on_clients.rpc(new_player_id, new_player_info)
 
-@rpc("authority", "call_local", "reliable")
-func _register_player_on_clients(id, new_player_info):
-	players[id] = new_player_info
-	player_connected.emit(id, new_player_info)
 
 func _on_player_disconnected(id):
 	print("ON PLAYER DISCONNECTED")
