@@ -205,8 +205,6 @@ func _on_connected_ok():
 	var peer_id = multiplayer.get_unique_id()
 	players[peer_id] = player_info.duplicate()
 	player_connected.emit(peer_id, players[peer_id])
-	
-	_register_player.rpc_id(1, player_info)
 
 
 func _on_connected_fail():
