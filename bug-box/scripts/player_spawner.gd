@@ -4,6 +4,7 @@ const SPACING := 5.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("PLAYER SPAWNER READY")
 	if !multiplayer.is_server():
 		# Tell the server this client's level is loaded and ready for spawns
 		if Globals.game_starting:
@@ -35,6 +36,7 @@ func _on_peer_level_loaded(id) -> void:
 
 # Spawn all currently connected players
 func spawn_players():
+	print("spawnplayers function")
 	if !(multiplayer.is_server()):
 		return
 

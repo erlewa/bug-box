@@ -70,7 +70,7 @@ func _ready() -> void:
 			bug_model = plainbug.instantiate()
 			bug_model.translate(Vector3(0, 0, 1))
 	
-	animator = bug_model.get_children().filter(func(x): return x is AnimationPlayer)[0]
+	#animator = bug_model.get_children().filter(func(x): return x is AnimationPlayer)[0]
 	add_child(bug_model)
 	
 	local = (peer_id == multiplayer.get_unique_id())

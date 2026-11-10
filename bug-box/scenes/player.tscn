@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cad3tk841gia0"]
+[gd_scene load_steps=6 format=3 uid="uid://cad3tk841gia0"]
 
 [ext_resource type="Script" uid="uid://c7bisibikqqxe" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://b340f6tx0ro8r" path="res://scenes/axis_debug.tscn" id="3_qhqgy"]
@@ -45,29 +45,29 @@ height = 2.265747
 [sub_resource type="SphereShape3D" id="SphereShape3D_tdnfp"]
 radius = 1.5
 
-[node name="Player" type="CharacterBody3D" unique_id=216894610 node_paths=PackedStringArray("CAMERA_CONTROLLER")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER")]
 script = ExtResource("1_3vyb7")
 CAMERA_CONTROLLER = NodePath("Camera3D")
 
-[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1852423883]
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 unique_name_in_owner = true
 replication_config = SubResource("SceneReplicationConfig_3vyb7")
 
-[node name="ClientSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=766818782]
+[node name="ClientSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_3vyb7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1484261188]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1.9106855e-15, -4.3711385e-08, 0.99999994, -1, -4.3711385e-08, 0, 4.371139e-08, -0.99999994, -4.3711385e-08, -0.046447754, 0.28323197, 1.3900461)
 shape = SubResource("CapsuleShape3D_021oi")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1787981846]
+[node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.9100582, 0.41448048, 0, -0.41448048, 0.9100582, 0, 2.5564418, 3.793838)
 
-[node name="RayCast3D" type="RayCast3D" parent="." unique_id=2126956000]
+[node name="RayCast3D" type="RayCast3D" parent="."]
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -1)
 
-[node name="Debug" type="Control" parent="." unique_id=159988412]
+[node name="Debug" type="Control" parent="."]
 unique_name_in_owner = true
 visible = false
 layout_mode = 3
@@ -78,7 +78,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
-[node name="BasisLabel" type="Label" parent="Debug" unique_id=756922720]
+[node name="BasisLabel" type="Label" parent="Debug"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 12.0
@@ -87,7 +87,7 @@ offset_right = 52.0
 offset_bottom = 30.0
 text = "Basis: "
 
-[node name="PhysicsLabel" type="Label" parent="Debug" unique_id=1393303518]
+[node name="PhysicsLabel" type="Label" parent="Debug"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 10.0
@@ -96,7 +96,7 @@ offset_right = 50.0
 offset_bottom = 167.0
 vertical_alignment = 1
 
-[node name="PlayerLabel" type="Label" parent="Debug" unique_id=1551562427]
+[node name="PlayerLabel" type="Label" parent="Debug"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 10.0
@@ -104,7 +104,7 @@ offset_top = 80.0
 offset_right = 50.0
 offset_bottom = 103.0
 
-[node name="GravityLabel" type="Label" parent="Debug" unique_id=36066043]
+[node name="GravityLabel" type="Label" parent="Debug"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
@@ -115,18 +115,18 @@ offset_right = 83.0
 grow_vertical = 0
 text = "Grav Label"
 
-[node name="AxisDebug" parent="." unique_id=1792255886 instance=ExtResource("3_qhqgy")]
+[node name="AxisDebug" parent="." instance=ExtResource("3_qhqgy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3709276, 0)
 visible = false
 
-[node name="TagArea" type="Area3D" parent="." unique_id=1018431661]
+[node name="TagArea" type="Area3D" parent="."]
 unique_name_in_owner = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TagArea" unique_id=203214567]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TagArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
 shape = SubResource("SphereShape3D_tdnfp")
 
-[node name="Username" type="Label3D" parent="." unique_id=1188345540]
+[node name="Username" type="Label3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.4557495, 1.0626831)
 billboard = 1
