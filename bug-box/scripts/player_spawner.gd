@@ -24,7 +24,7 @@ func spawn_player(peer_id, player_info):
 		return
 	var player = PLAYER.instantiate()
 	player.peer_id = peer_id
-	player.position = GameController.current_scene.get_spawn_location()
+	#player.position = GameController.current_scene.get_spawn_location()
 	player.role = player_info.get("role", "hider")
 	player.bugindex = player_info["bugindex"]
 	player.username = player_info["name"] if !player_info["name"].strip_edges().is_empty() else "Player"+str(peer_id)

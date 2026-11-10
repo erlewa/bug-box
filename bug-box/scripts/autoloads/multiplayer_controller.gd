@@ -35,7 +35,8 @@ var players_ready = 0
 
 
 func _ready():
-	print("Steam initialized: ", Steam.steamInit(480, true))
+	Globals.steam_initialized = Steam.steamInit(480, true)
+	print("Steam initialized: ", Globals.steam_initialized)
 	Steam.initRelayNetworkAccess()
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
@@ -110,40 +111,40 @@ func _on_lobby_joined(lobby_id: int, permission : int, locked: bool, response: i
 
 
 # Called from Join Game button
-func join_game(address = "", name = "", bugindex = 0):
+func join_game(isSteam, address = "", name = "", bugindex = 0):
 	player_info["bugindex"] = bugindex
 	player_info["name"] = name
 	
-	is_joining = true
-	Steam.joinLobby(address.to_int())
-	
-	#if address.is_empty():
-		#address = DEFAULT_SERVER_IP
-	#var peer = ENetMultiplayerPeer.new()
-	#var error = peer.create_client(address, PORT)
-	#if error:
-		#return error
-	#multiplayer.multiplayer_peer = peer
+	if isSteam:
+		is_joining = true
+		Steam.joinLobby(address.to_int())
+	else:
+		if address.is_empty():
+			address = DEFAULT_SERVER_IP
+		var peer = ENetMultiplayerPeer.new()
+		var error = peer.create_client(address, PORT)
+		if error:
+			return error
+		multiplayer.multiplayer_peer = peer
 
 
 # Called from Host Game button
-func create_game(name = "", bugindex = 0):
+func create_game(isSteam, name = "", bugindex = 0):
 	player_info["bugindex"] = bugindex
 	player_info["name"] = name
 	
-	Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 10)
-	is_host = true
-	#print("Creating Game")
-	#var peer = ENetMultiplayerPeer.new()
-	#var error = peer.create_server(PORT, MAX_CONNECTIONS)
-	#if error:
-		#return error
-	#multiplayer.multiplayer_peer = peer
-#
-	#player_info["bugindex"] = bugindex
-	#player_info["name"] = name
-	#players[1] = player_info
-	#player_connected.emit(1, player_info)
+	if isSteam:
+		Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, 10)
+		is_host = true
+	else:
+		var peer = ENetMultiplayerPeer.new()
+		var error = peer.create_server(PORT, MAX_CONNECTIONS)
+		if error:
+			return error
+		multiplayer.multiplayer_peer = peer
+
+		players[1] = player_info
+		player_connected.emit(1, player_info)
 
 func remove_multiplayer_peer():
 	print("REMOVE MULTIPLAYER PEER")

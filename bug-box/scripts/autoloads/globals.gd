@@ -15,6 +15,7 @@ const MAIN_MENU = "res://scenes/levels/main_menu.tscn"
 #  Game State  #
 ################
 
+var steam_initialized: bool = false
 var game_starting: bool = false
 
 #############
