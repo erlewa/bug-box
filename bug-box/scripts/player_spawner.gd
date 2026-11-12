@@ -4,6 +4,7 @@ const SPACING := 5.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("PLAYER SPAWNER READY")
 	if !multiplayer.is_server():
 		# Tell the server this client's level is loaded and ready for spawns
 		if Globals.game_starting:
@@ -23,7 +24,7 @@ func spawn_player(peer_id, player_info):
 		return
 	var player = PLAYER.instantiate()
 	player.peer_id = peer_id
-	player.position = _spawn_position(peer_id, player.position)
+	#player.position = GameController.current_scene.get_spawn_location()
 	player.role = player_info.get("role", "hider")
 	player.bugindex = player_info["bugindex"]
 	player.username = player_info["name"] if !player_info["name"].strip_edges().is_empty() else "Player"+str(peer_id)
@@ -35,19 +36,10 @@ func _on_peer_level_loaded(id) -> void:
 
 # Spawn all currently connected players
 func spawn_players():
+	print("spawnplayers function")
 	if !(multiplayer.is_server()):
 		return
 
 	for id in MultiplayerController.players:
 		spawn_player(id, MultiplayerController.players[id])
 		
-func _spawn_position(peer_id: int, default_pos: Vector3) -> Vector3:
-	var ids = MultiplayerController.players.keys()
-	var index = maxi(ids.find(peer_id), 0)
-	
-	var n = ids.size()
-	if n < 2:
-		return default_pos
-	var radius = SPACING / (2.0 * sin(PI / n))
-	var angle = TAU * index / n
-	return default_pos + Vector3(cos(angle), 0.0, sin(angle)) * radius
